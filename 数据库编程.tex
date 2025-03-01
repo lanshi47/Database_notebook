@@ -1,0 +1,83 @@
+\section{数据库编程}
+\subsection{嵌入式SQL与主语言之间的通信}
+
+嵌入式SQL与主语言（如C、Java等）之间的通信主要通过以下几种方式进行：
+
+\begin{enumerate}
+    \item \textbf{SQL $\rightarrow$ 主语言}：
+        \begin{itemize}
+            \item \textbf{通信区（Communication Area, SQLCA）}：用于报告SQL语句执行的状态和错误信息。SQLCA是一个结构体或类，包含了SQL语句的执行结果、错误码、警告等信息。通过检查SQLCA，主语言程序可以获取SQL语句的执行情况并作出相应的响应。
+        \end{itemize}
+    
+    \item \textbf{主语言 $\rightarrow$ SQL}：
+        \begin{itemize}
+            \item \textbf{主变量（Host Variables）}：主语言的变量可以直接用在嵌入式SQL语句中，将主语言的数据传递到数据库中。在SQL预处理阶段，这些变量会被相应地绑定到SQL语句中。
+        \end{itemize}
+    
+    \item \textbf{查询结果 $\rightarrow$ 主语言}：
+        \begin{itemize}
+            \item \textbf{主变量和游标（Host Variables and Cursors）}：查询结果可以通过主变量直接返回，也可以使用游标来遍历返回的结果集。游标允许主语言程序逐行访问SQL查询（如SELECT语句）的结果数据。
+        \end{itemize}
+\end{enumerate}
+
+\textbf{通信区（SQLCA）}：
+\begin{itemize}
+    \item SQLCA提供了一套结构化或对象化的方式来访问SQL语句执行后的状态和错误信息。具体的字段可能包括：
+        \subitem SQLCODE（SQL代码）：指示了执行SQL操作的状态，正值表示警告，负值表示错误。
+        \subitem SQLERRM（错误信息）：包含了描述错误或状况的文本信息。
+\end{itemize}
+
+\textbf{主变量}：
+\begin{itemize}
+    \item 在嵌入式SQL中，可以声明与外部语言兼容的变量，这些变量可以用作输入参数发送到SQL，也可以作为输出接收查询结果的容器。
+\end{itemize}
+
+\textbf{游标（Cursors）}：
+\begin{itemize}
+    \item 游标是一个控制结构，允许对查询结果集进行逐行或批量操作。它包括声明、打开、获取数据、关闭等几个步骤：
+        \subitem \texttt{DECLARE}：声明游标。
+        \subitem \texttt{OPEN}：打开游标执行查询。
+        \subitem \texttt{FETCH}：从游标中获取一行或多行数据。
+        \subitem \texttt{CLOSE}：关闭游标释放资源。
+\end{itemize}
+
+\subsection{相关示例代码}
+下面是一个用C语言与嵌入式SQL（这里假设是使用了一种支持嵌入式SQL的编译器如Pro*C）的基本示例：
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+#include <string.h>
+
+EXEC SQL INCLUDE SQLCA;
+
+// 主变量声明
+int id;
+char name[20];
+
+EXEC SQL BEGIN DECLARE SECTION;
+int ID;
+char NAME[20];
+EXEC SQL END DECLARE SECTION;
+
+int main() {
+    EXEC SQL WHENEVER SQLERROR GOTO error;
+
+    // 从用户获取ID
+    printf("Enter ID: ");
+    scanf("%d", &ID);
+    
+    // 查询语句，使用变量
+    EXEC SQL SELECT name INTO :NAME FROM Employee WHERE id = :ID;
+    
+    // 打印结果
+    printf("Employee Name foram ID %d is %s", ID, NAME);
+    
+    goto end;
+
+error:
+    printf("Error: %d - %s", sqlca.sqlcode, sqlca.sqlerrm.sqlerrmc);
+
+end:
+    return 0;
+}
+\end{lstlisting}
