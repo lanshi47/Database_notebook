@@ -39,6 +39,7 @@
 *.synctex(busy)
 *.synctex.gz
 *.synctex.gz(busy)
+*.synctex.gz.sum.synctex
 *.pdfsync
 *.rubbercache
 rubber.cache
