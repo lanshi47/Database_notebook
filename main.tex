@@ -1,0 +1,37 @@
+\documentclass[UTF8]{ctexart}   
+\zihao{-4}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{listings}
+\lstset{
+    basicstyle=\ttfamily,
+    columns=fullflexible,
+    frame=single,
+    breaklines=true,
+    postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+    language=SQL
+}
+
+
+\begin{document}
+\begin{titlepage}
+    \centering % 确保居中对齐
+    % 居中封面内容
+    \vspace{2cm} % 插入垂直间距
+    {\Huge \textbf{数据库笔记}} \\
+    \vspace{1.5cm}
+    {\Large 烂石} \\
+    \vspace{2cm}
+    % 插入 Logo 图片
+    \begin{flushleft}
+        \centering % 确保居中对齐
+        \includegraphics[width=0.5\textwidth]{logo.jpg} % 左上角 Logo，调整宽度
+    \end{flushleft}
+    \vfill
+    {\large \today}
+\end{titlepage}
+\include{绪论}
+\include{数据库安全性(授权)}
+\include{数据库完整性}
+\end{document}
+

@@ -1,0 +1,77 @@
+ 
+
+\section{第四章:数据库安全性(授权)}
+\subsection{不安全因素}
+\begin{enumerate}
+    \item ,,
+    \item ,,,
+\end{enumerate}
+\subsection{数据库安全性控制}
+
+\subsection{\color{red}\textbf{为什么授权?}}
+\textbf{授权是指授予(GRANT)和收回(REVOKE),自主存取控制的方法,为了保护数据库防止不合法使用导致数据泄露更改或破坏}
+
+\subsection{\color{red}\textbf{如何授权:授予GRANT}}
+\begin{lstlisting}[language=SQL]
+    GRANT 权限 ON 对象类型 对象名 TO 用户名 [WITH GRANT OPTION];
+\end{lstlisting}
+\begin{description}
+    \item[权限] 这些是数据库访问的各种权限。例如 SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, DROP，以及所有权限的缩写 ALL PRIVILEGES 等等。多个权限之间用逗号分隔。
+    \item[对象类型:] 这是数据库中可以授予权限的对象类型。常见的类型包括 TABLE, DATABASE, VIEW, FUNCTION, PROCEDURE 等。
+    \item[对象名:] 这是具体的数据库对象的名称。比如，如果是表，则可以写表名。如果是数据库全局权限，则直接使用 *。
+    \item[TO 用户名:] 指定接受权限的用户或角色。这里可以使用用户名（可能与数据库的用户系统有关）或角色名。如果需要授予权限给多个用户或角色，可以用逗号分隔。
+    \item[WITH GRANT OPTION:] 这是可选的子句，它允许被授予权限的用户也能将这些权限再授予其他用户。如果没有这个选项，则用户只能使用这些权限，而不能再传递给其他人.
+\end{description}
+\paragraph*{示例}
+\begin{enumerate}
+    \item 给用户 user1 授予 employees 表的 SELECT 权限:
+    \begin{lstlisting}[language=SQL]
+        GRANT SELECT ON TABLE employees TO user1;
+    \end{lstlisting}
+    \item 授予 user1 对整个数据库 testDB 查看所有表(ALL TABLES IN SCHEMA)的SELECT权限：
+    \begin{lstlisting}[language=SQL]
+        GRANT SELECT ON ALL TABLES IN SCHEMA testDB TO user1;
+    \end{lstlisting}
+    \item 给用户 admin 授予对数据库的所有权限并允许其传递这些权限：
+    \begin{lstlisting}[language=SQL]
+        GRANT ALL PRIVILEGES ON DATABASE testDB TO admin WITH GRANT OPTION;
+    \end{lstlisting}
+\end{enumerate}
+\textbf{注意:} SQL不允许循环授权(不能以下犯上)
+\subsection{收回授权:收回 REVOKE}
+\begin{lstlisting}[language=SQL]
+    REVOKE 权限 ON 对象类型 对象名 FROM 用户名 [CASCADE][RESTRICT]
+\end{lstlisting}
+\paragraph*{权限} 
+权限是用户在数据库中的操作许可，例如 SELECT, INSERT, UPDATE, DELETE 等。
+
+\paragraph*{对象类型} 
+这里指的是数据库中的对象，如 TABLE, VIEW, SEQUENCE, PROCEDURE 等。
+
+\paragraph*{对象名} 
+指定权限语句所作用的特定对象的名称。
+
+\paragraph*{用户名} 
+需要从中撤销权限的用户或角色名称。
+
+\paragraph*{CASCADE}
+如果指定了 CASCADE，当用户拥有权限再授权给其他用户时，撤销其权限也会撤销所有通过他间接获得的权限。
+
+\paragraph*{RESTRICT} 
+（可选的，非必要）如果用户已经将权限再授权给其他用户，将阻止该 REVOKE 操作。
+使用 \lstinline|RESTRICT| 是为了确保不会不经意地删除其他用户对这些对象的访问权限。
+
+\paragraph*{示例}
+\begin{lstlisting}[language=SQL]
+REVOKE SELECT ON TABLE employees FROM bob CASCADE;
+\end{lstlisting}
+这段语句会撤销用户 `bob` 的 `SELECT` 权限，并且由于使用了 `CASCADE`，任何通过 `bob` 获得的 `SELECT` 权限也会被撤销。
+
+\paragraph*{注意}
+\texttt{RESTRICT} 和 \texttt{CASCADE} 只能选择一个，不能同时使用。
+
+
+
+
+
+
