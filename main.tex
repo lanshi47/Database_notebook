@@ -1,8 +1,25 @@
-\documentclass[UTF8]{ctexart}   
-\zihao{-4}
-\usepackage{xcolor}
-\usepackage{graphicx}
-\usepackage{listings}
+\documentclass[UTF8,a4paper,12pt,autoindent=true,fontset=none,zihao=-4,scheme=chinese,space=auto]{ctexart}
+\usepackage{bookmark}%书签
+\setCJKmainfont{SimSun}[BoldFont={SimHei}, ItalicFont={KaiTi}, BoldItalicFont={FangSong}]  % 设置SimSun为主中文字体, 加粗, 斜体, 加粗斜体.
+\setmainfont{Times New Roman}[BoldFont={Times New Roman Bold}, ItalicFont={Times New Roman Italic}, BoldItalicFont={Times New Roman Bold Italic}]  % 设置Times New Roman为主英文字体, 加粗, 斜体, 加粗斜体.
+
+
+\usepackage{amsmath}%数学公式
+\usepackage{amssymb}%数学符号
+\usepackage{mathrsfs}%花体
+\usepackage{amsfonts}%字体
+\usepackage{amsthm}%定理
+\usepackage{bm}%加粗
+\usepackage{cite}%引用
+\usepackage{hyperref}%超链接
+\usepackage{url}%超链接
+\usepackage{booktabs}%三线表
+\usepackage{caption}%标题
+\usepackage{float}%图片位置
+\usepackage{xcolor}%颜色
+\usepackage{graphicx}%插入图片
+\usepackage{listings}%插入代码
+% 设置代码块样式
 \lstset{
     basicstyle=\ttfamily,
     columns=fullflexible,
@@ -11,7 +28,10 @@
     postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
     language=SQL
 }
-
+%设置正文样式, 1.5倍行距, 段前段后0.5行, 段落首行缩进2字符
+\linespread{1.5}
+\setlength{\parskip}{0.5\baselineskip}
+\setlength{\parindent}{2em}
 
 \begin{document}
 \begin{titlepage}
@@ -33,5 +53,11 @@
 \include{绪论}
 \include{数据库安全性(授权)}
 \include{数据库完整性}
+\include{数据库编程}
+\include{数据库设计的步骤}
+\include{数据库恢复技术}
+\include{并发控制}
+\include{关系理论}
+\include{关系语言}
 \end{document}
 

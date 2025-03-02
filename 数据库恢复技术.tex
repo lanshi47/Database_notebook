@@ -1,2 +1,37 @@
 \section{数据库恢复技术}
 \subsection{事务的概念}
+\begin{enumerate}
+    \item 数据库操作序列：定义事务为一组相关数据库操作的集合，作为一个整体执行。
+    \item 恢复的基本单位和并发控制的基本单位：确保在故障恢复时保持数据一致性和完整性。
+\end{enumerate}
+
+\subsection{事务的SQL语句}
+% 更新：扩展SQL语句，加入提交和保存点等相关命令
+\begin{itemize}
+    \item 提交：COMMIT
+    \item 回滚：ROLLBACK
+    \item 保存点：SAVEPOINT
+\end{itemize}
+
+\subsection{事务的四个特性}
+\begin{enumerate}
+    \item 原子性
+    \item 一致性
+    \item 隔离性
+    \item 持续性
+\end{enumerate}
+
+\subsection{DBS的故障种类}
+\begin{enumerate}
+    \item 事务内部的故障
+    \item 系统故障（软故障，如软件错误）
+    \item 介质故障（硬故障，如硬盘损坏）
+    \item 计算机病毒及其他安全问题
+\end{enumerate}
+
+\subsection{数据库恢复技术}
+\begin{enumerate}
+    \item 数据转储：采用全量备份与增量备份策略，便于恢复最新数据。
+    \item 日志记录：登记日志文件，既可按记录为单位，也可按数据块为单位，辅助精确恢复。
+\end{enumerate}
+
