@@ -1,0 +1,132 @@
+\section{关系理论}
+\subsection{函数依赖}
+\noindent 非平凡的函数依赖: 对于函数依赖 $X \rightarrow Y$, 若 $Y \not\subseteq X$, 则称为非平凡的函数依赖.\\
+平凡的函数依赖: 对于函数依赖 $X \rightarrow Y$, 若 $Y \subseteq X$, 则称为平凡的函数依赖.\\
+完全函数依赖: 若 $X \rightarrow Y$成立, 且对于任意 $X$ 的真子集 $X'$, $X' \rightarrow Y$ 均不成立, 则称 $Y$ 对 $X$ 完全依赖.\\
+部分函数依赖: 若 $X \rightarrow Y$成立, 且存在 $X'$ 为 $X$ 的真子集使得 $X' \rightarrow Y$ 成立, 则称 $Y$ 对 $X$ 部分依赖.\\
+
+\subsection{码}
+候选码: 一个属性集合，满足该集合的属性闭包等于关系中的所有属性，且任一真子集的闭包不等于所有属性.\\
+求候选码的方法:
+\begin{enumerate}
+    \item 确定必须包含的属性: 只出现在依赖左侧的属性或未在依赖中出现的属性.
+    \item 确定可能包含的属性: 同时出现在依赖左右两侧的属性.
+    \item 组合构造最小的属性集（候选码），其闭包为整个关系.
+\end{enumerate}
+例题:
+\begin{enumerate}
+    \item $R(A, B, C, D, E)$, $F = \{A \rightarrow B, B \rightarrow C, C \rightarrow D, D \rightarrow E\}$, 求候选码.\\
+    答案: 候选码为$\{A\}$\\
+    证明: $A \rightarrow B \rightarrow C \rightarrow D \rightarrow E$.
+    \item $R(A, B, C, D, E)$, $F = \{A \rightarrow B, B \rightarrow C, C \rightarrow D, D \rightarrow E, A \rightarrow D\}$, 求候选码.\\
+    答案: 候选码为$\{A\}$\\
+    证明: $A \rightarrow B \rightarrow C \rightarrow D \rightarrow E$ 以及 $A \rightarrow D$.
+\end{enumerate}
+超码: 一个属性集合, 若其闭包包含关系中所有属性, 则称为超码.\\
+主码（码）: 最小的超码，即去除任一属性后闭包不再等于整个关系的属性集合.\\
+主属性: 属于主码的属性.\\
+非主属性: 不属于主码的属性.\\
+外码: 与其它关系候选码建立关联的属性集合.\\
+全码: 关系中所有属性组成的集合.\\
+\subsection{范式}
+\noindent 第一范式（1NF）: 关系中的每个属性都是不可再分的基本数据项.\\
+第二范式（2NF）: 关系中的每个非主属性完全依赖于任意一个候选码.\\
+第三范式（3NF）: 关系中的每个非主属性不传递依赖于任意一个候选码.\\
+BCNF: 关系中的每个属性都与候选码有直接关系.\\
+4NF: 关系中的每个多值依赖都是平凡的或者完全依赖于候选码.\\
+判断范式的方法:
+\begin{enumerate}
+    \item 1NF: 检查是否有多值属性.
+    \item 2NF: 检查是否有部分依赖.
+    \item 3NF: 检查是否有传递依赖.
+    \item BCNF: 检查是否有非平凡的函数依赖.
+    \item 4NF: 检查是否有多值依赖.
+\end{enumerate}
+分解关系的方法:画依赖图分析关系。
+从低到高逐步分解，不要跳过步骤。\\
+分解关系的目的:
+\begin{enumerate}
+    \item 保持函数依赖: 保持原关系中的所有函数依赖.
+    \item 保持连接性: 保持原关系中的所有元组.
+    \item 保持覆盖性: 保持原关系中的所有属性.
+\end{enumerate}
+\subsection{最小函数依赖集}
+求最小函数依赖集的方法:
+\begin{enumerate}
+    \item 拆分右侧多属性: 若 $X \rightarrow Y$，则 $X \rightarrow Y_i$.
+    \item 去除自身求闭包: 若 $X \rightarrow Y$，则 $X$ 的真子集 $X'$ 不能决定 $Y$.
+    \item 左侧最小化: 若 $X \rightarrow Y$，则 $X$ 的真子集 $X'$ 不能决定 $Y$.
+\end{enumerate}
+例题:
+设 $R(A, B, C, D, E)$, $F = \{C \rightarrow A, CG \rightarrow BD, CE \rightarrow A, ACD \rightarrow B\}$, 求最小函数依赖集.\\
+解析:\begin{enumerate}
+    \item 拆分右侧多属性: $CG \rightarrow BD$ 可拆分为 $CG \rightarrow B$ 和 $CG \rightarrow D$.
+    \item 去除自身的依赖,求能不能闭包: 保留$C \rightarrow A$,去掉$CG \rightarrow B$,保留$CG \rightarrow D$,去掉$CE \rightarrow A$,保留$ACD \rightarrow B$.
+    \item 左侧最小化: $ACD \rightarrow B$ 可最小化为 $CD \rightarrow B$.
+    \end{enumerate}
+答案: 最小函数依赖集为$\{C \rightarrow A,CG \rightarrow D, CD \rightarrow B\}$.
+\subsection{模式分解}
+判断无损连接分解的方法:
+\begin{enumerate}
+    \item 画表格，列出原关系的所有属性.
+    \item 画表格，列出分解后的关系的所有属性.
+    \item 更新表格，列出所有属性的闭包.
+    \item 若闭包相等，则无损连接.
+\end{enumerate}
+例题:
+设 $R(A, B, C, D, E)$, $F = \{A \rightarrow C, C \rightarrow D, DE \rightarrow C, CE \rightarrow A\}$, 求模式分解.\\
+解析:
+\par 关系模式 \( R(A, B, C, D, E) \) 在函数依赖集 \( F = \{A \rightarrow C, C \rightarrow D, DE \rightarrow C, CE \rightarrow A\} \) 下的 \textbf{3NF 分解} 如下：
+
+\begin{enumerate}
+    \item \textbf{DEC(D, E, C)}
+    \begin{itemize}
+        \item 包含函数依赖 \( DE \rightarrow C \) 和 \( C \rightarrow D \)。
+        \item 候选键为 \( DE \)，满足 3NF。
+    \end{itemize}
+
+    \item \textbf{CEA(C, E, A)}
+    \begin{itemize}
+        \item 包含函数依赖 \( CE \rightarrow A \) 和 \( A \rightarrow C \)。
+        \item 候选键为 \( CE \)，满足 3NF。
+    \end{itemize}
+
+    \item \textbf{BCE(B, C, E)}
+    \begin{itemize}
+        \item 包含候选键 \( BCE \)，确保无损连接。
+        \item 所有属性均为候选键的一部分，满足 3NF。
+    \end{itemize}
+\end{enumerate}
+
+\textbf{分解步骤说明：}
+\begin{enumerate}
+    \item \textbf{确定候选键}
+    \begin{itemize}
+        \item 通过闭包计算，候选键为 \( BCE \)、\( BDE \)、\( BAE \)。所有候选键必须包含 \( B \)，因为 \( B \) 无法通过其他属性推导。
+    \end{itemize}
+
+    \item \textbf{构造 3NF 关系模式}
+    \begin{itemize}
+        \item 为每个函数依赖创建关系模式：
+        \begin{itemize}
+            \item \( A \rightarrow C \) 映射到 \textbf{CEA}（通过合并 \( CE \rightarrow A \)）。
+            \item \( C \rightarrow D \) 映射到 \textbf{DEC}（与 \( DE \rightarrow C \) 合并）。
+            \item 添加候选键关系模式 \textbf{BCE}。
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{验证依赖保持与无损连接}
+    \begin{itemize}
+        \item 所有函数依赖均被保留在子模式中。
+        \item 候选键 \( BCE \) 的存在保证了无损连接。
+    \end{itemize}
+\end{enumerate}
+答案:\\
+\textbf{最终分解结果：}
+\begin{itemize}
+    \item \textbf{DEC(D, E, C)}
+    \item \textbf{CEA(C, E, A)}
+    \item \textbf{BCE(B, C, E)}
+\end{itemize}
+
+该分解满足 3NF，保持所有函数依赖，并确保无损连接。
