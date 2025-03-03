@@ -1,2 +1,258 @@
 \section{SQL语句}
-\subsection{SQL语句分类}
+\subsection{定义基本表 CREATE TABLE}
+\begin{lstlisting}
+CREATE TABLE 表名 (
+    列名1 数据类型1 [约束条件1],
+    列名2 数据类型2 [约束条件2],
+    ...
+    列名n 数据类型n [约束条件n]
+    表级约束条件1,
+    表级约束条件2,
+    ...
+    表级约束条件n
+);
+\end{lstlisting}
+\subsubsection{数据类型}
+\begin{itemize}
+    \item CHAR(n): 定长字符串，n 为字符个数。
+    \item VARCHAR(n): 变长字符串，最大长度为 n。
+    \item NUMBER(n):长度为 n 的数字。
+    \item INT: 整数, 4 字节。
+    \item SMALLINT: 小整数, 2 字节。
+    \item BIGINT: 大整数, 8 字节。
+    \item FLOAT(n): 浮点数, n 为有效位数。
+    \item DATE: 日期, 格式为 YYYY-MM-DD。
+    \item TIME: 时间, 格式为 HH:MM:SS。
+    \item TIMESTAMP: 时间戳, 格式为 YYYY-MM-DD HH:MM:SS。
+\end{itemize}
+\subsubsection{约束条件}
+\begin{itemize}
+    \item NOT NULL: 非空。
+    \item PRIMARY KEY: 主码,可以有多个列组成。
+    \item UNIQUE: 唯一。
+    \item FOREIGN KEY: 外键。
+    \item CHECK: 检查约束。
+\end{itemize}
+\subsubsection{表级约束条件}
+\begin{itemize}
+    \item PRIMARY KEY(列名1, 列名2, ..., 列名n): 主码。
+    \item UNIQUE(列名1, 列名2, ..., 列名n): 唯一。
+    \item FOREIGN KEY(列名1, 列名2, ..., 列名n) REFERENCES 表名(列名1, 列名2, ..., 列名n): 外键。
+    \item CHECK(条件): 检查约束。
+\end{itemize}
+eg:
+\begin{lstlisting}
+CREATE TABLE student (
+    sno CHAR(8),
+    sname VARCHAR(20) NOT NULL,
+    ssex CHAR(2) CHECK(ssex IN ('男', '女')),
+    sage SMALLINT CHECK(sage >= 0 AND sage <= 150),
+    sdept VARCHAR(20),
+    PRIMARY KEY(sno),
+    UNIQUE(sname, ssex)
+);
+\end{lstlisting}
+\subsection{插入数据 INSERT INTO}
+\begin{lstlisting}
+INSERT INTO 表名(列名1, 列名2, ..., 列名n) VALUES(值1, 值2, ..., 值n);
+\end{lstlisting}
+eg:
+\begin{lstlisting}
+INSERT INTO student(sno, sname, ssex, sage, sdept) VALUES('201215121', '李勇', '男', 20, '计算机系');
+\end{lstlisting}
+\subsection{删除数据 DELETE}
+\begin{lstlisting}
+DELETE FROM 表名 WHERE 条件;
+\end{lstlisting}
+eg:注意完整性约束, 删除主码时, 会删除相关的外码。
+\begin{lstlisting}
+DELETE FROM student WHERE sno = '201215121';
+\end{lstlisting}
+\subsection{更新数据 UPDATE}
+\begin{lstlisting}
+UPDATE 表名 SET 列名1 = 值1, 列名2 = 值2, ..., 列名n = 值n WHERE 条件;
+\end{lstlisting}
+eg:
+\begin{lstlisting}
+UPDATE student SET sdept = '电子系' WHERE sno = '201215121';
+\end{lstlisting}
+\subsection{\color{red}查询数据 SELECT}
+\begin{lstlisting}
+SELECT (DISTINCT) 列名1, 列名2, ..., 列名n // 查询的列,DISTINCT 可选项,去重, 默认不去重
+FROM 表名1, 表名2, ..., 表名n // 查询的表
+WHERE 条件 // 查询条件
+GROUP BY 列名1, 列名2, ..., 列名n // 分组
+ORDER BY 列名1, 列名2, ..., 列名n; // 排序, 默认升序ASC, 降序加 DESC
+\end{lstlisting}
+eg:
+\begin{lstlisting}
+SELECT * FROM student WHERE sdept = '计算机系' ORDER BY sage DESC;
+\end{lstlisting}
+聚合函数:当聚合函数遇到空值时,会忽略该值。聚合函数只能用于 SELECT 语句和GROUP BY 和 HAVING 子句中。
+\begin{itemize}
+    \item COUNT(列名): 计数。
+    \item SUM(列名): 求和。
+    \item AVG(列名): 平均值。
+    \item MAX(列名): 最大值。
+    \item MIN(列名): 最小值。
+\end{itemize}
+eg:
+\begin{lstlisting}
+SELECT COUNT(*), AVG(sage) FROM student WHERE sdept = '计算机系';//查询计算机系学生人数和平均年龄
+\end{lstlisting}
+where 条件:
+\begin{itemize}
+    \item 列名 = 值: 等于。
+    \item 列名 <> 值: 不等于。
+    \item 列名 > 值: 大于。
+    \item 列名 < 值: 小于。
+    \item 列名 >= 值: 大于等于。
+    \item 列名 <= 值: 小于等于。
+    \item 列名 BETWEEN 值1 AND 值2: 在值1和值2之间。
+    \item 列名 NOT BETWEEN 值1 AND 值2: 不在值1和值2之间。
+    \item 列名 AND 列名: 与。
+    \item 列名 OR 列名: 或。
+    \item 列名 IS NULL: 为空。
+    \item 列名 IS NOT NULL: 不为空。
+    \item 列名 IN (值1, 值2, ..., 值n): 在值1, 值2, ..., 值n中。
+    \item 列名 LIKE 模式: 模糊查询。
+    
+\end{itemize}
+eg:
+\begin{lstlisting}
+SELECT sdept, COUNT(*), AVG(sage) FROM student WHERE sage > 20 GROUP BY sdept HAVING COUNT(*) > 2 ORDER BY sdept;//查询年龄大于20的学生各系人数和平均年龄, 人数大于2的系
+\end{lstlisting}
+字符匹配模式:在ASCII字符集中, 一个汉字占两个字符, 一个字母占一个字符。在GBK字符集中, 一个汉字占两个字符, 一个字母占一个字符。在UTF-8字符集中, 一个汉字占三个字符, 一个字母占一个字符。在UTF-16字符集中, 一个汉字占两个字符, 一个字母占两个字符。
+通配符:
+\begin{itemize}
+    \item \%: 任意字符。
+    \item \_: 单个字符。
+\end{itemize}
+转义字符\textbackslash:在模糊查询中, \%和\_是通配符, 如果要查询这两个字符, 需要使用转义字符。
+eg:
+\begin{lstlisting}
+SELECT * FROM student WHERE sname LIKE '李%';//查询姓李的学生
+\end{lstlisting}
+
+GROUP BY 子句:对查询结果进行分组, 通常与聚合函数一起使用。
+HAVING 子句:对分组后的结果进行筛选。
+\begin{lstlisting}
+SELECT 列名1, 列名2, ..., 列名n, 聚合函数1, 聚合函数2, ..., 聚合函数n
+FROM 表名1, 表名2, ..., 表名n
+WHERE 条件
+GROUP BY 列名1, 列名2, ..., 列名n
+HAVING 条件
+\end{lstlisting}
+eg:
+\begin{lstlisting}
+SELECT sdept, COUNT(*), AVG(sage) FROM student GROUP BY sdept HAVING COUNT(*) > 2 ORDER BY sdept;//查询各系人数和平均年龄, 人数大于2的系
+\end{lstlisting}
+ORDER BY 子句:对查询结果进行排序。
+\begin{lstlisting}
+SELECT 列名1, 列名2, ..., 列名n
+FROM 表名1, 表名2, ..., 表名n
+WHERE 条件
+ORDER BY 列名1, 列名2, ..., 列名n;
+\end{lstlisting}
+eg:
+\begin{lstlisting}
+SELECT * FROM student ORDER BY sage DESC;//按年龄降序排序
+\end{lstlisting}
+\subsection{连接查询}
+两表连接查询:
+\begin{lstlisting}
+SELECT 列名1, 列名2, ..., 列名n
+FROM 表名1, 表名2
+WHERE 表名1.列名 = 表名2.列名;
+\end{lstlisting}
+eg:
+\begin{lstlisting}
+SELECT student.sno, student.sname, student.sdept, course.cname, score.degree FROM student, course, score WHERE student.sno = score.sno AND course.cno = score.cno;//查询学生的学号, 姓名, 课程名, 成绩
+\end{lstlisting}
+单表自连接查询:
+\begin{lstlisting}
+SELECT 列名1, 列名2, ..., 列名n
+FROM 表名1 别名1, 表名1 别名2
+WHERE 别名1.列名 = 别名2.列名;
+\end{lstlisting}
+eg:
+\begin{lstlisting}
+SELECT a.sno, a.sname, b.sname FROM student a, student b WHERE a.sdept = b.sdept AND a.sname <> b.sname;//查询同系不同名的学生
+\end{lstlisting}
+外连接查询:
+\begin{lstlisting}
+SELECT 列名1, 列名2, ..., 列名n
+FROM 表名1 LEFT JOIN 表名2 ON 表名1.列名 = 表名2.列名;
+\end{lstlisting}
+eg:
+\begin{lstlisting}
+SELECT student.sno, student.sname, score.degree FROM student LEFT JOIN score ON student.sno = score.sno;//查询学生的学号, 姓名, 成绩
+\end{lstlisting}
+\subsection{嵌套查询}
+\subsubsection{子查询}
+\begin{lstlisting}
+SELECT 列名1, 列名2, ..., 列名n
+FROM 表名
+WHERE 列名 IN (SELECT 列名 FROM 表名 WHERE 条件);
+\end{lstlisting}
+eg:
+\begin{lstlisting}
+SELECT * FROM student WHERE sdept IN (SELECT sdept FROM student WHERE sname = '李勇');//查询和李勇同系的学生
+\end{lstlisting}
+\subsubsection{比较子查询}
+\begin{lstlisting}
+SELECT 列名1, 列名2, ..., 列名n
+FROM 表名1
+WHERE 列名 运算符 (SELECT 列名 FROM 表名2 WHERE 条件);
+\end{lstlisting}
+eg:
+\begin{lstlisting}
+SELECT * FROM student WHERE sage > (SELECT AVG(sage) FROM student WHERE sdept = '计算机系');//查询计算机系年龄大于平均年龄的学生
+\end{lstlisting}
+\subsubsection{连接子查询}
+\begin{lstlisting}
+SELECT 列名1, 列名2, ..., 列名n
+FROM 表名1
+WHERE EXISTS (SELECT * FROM 表名2 WHERE 条件);
+\end{lstlisting}
+eg1:在SC表中查询至少选修了1号学生选修的全部课程(Cno)的学生的学号(Sno)。
+\begin{lstlisting}
+SELECT DISTINCT Sno
+FROM SC WHERE EXISTS 
+(SELECT * FROM SC WHERE SC.Sno = Sno AND SC.Cno = 1); //查询至少选修了1号学生选修的全部课程的学生的学号
+\end{lstlisting}
+\subsection{集合查询}
+\subsubsection{UNION}
+\begin{lstlisting}
+SELECT 列名1, 列名2, ..., 列名n
+FROM 表名1
+UNION
+SELECT 列名1, 列名2, ..., 列名n
+FROM 表名2;
+\end{lstlisting}
+eg:
+\begin{lstlisting}
+SELECT sno FROM student WHERE sdept = '计算机系' UNION SELECT sno FROM student WHERE sdept = '电子系';//查询计算机系和电子系的学生学号
+\end{lstlisting}
+\subsubsection{INTERSECT}
+\begin{lstlisting}
+SELECT 列名1, 列名2, ..., 列名n
+FROM 表名1
+INTERSECT
+SELECT 列名1, 列名2, ..., 列名n
+FROM 表名2;
+\end{lstlisting}
+eg:
+\begin{lstlisting}
+SELECT sno FROM student WHERE sdept = '计算机系' INTERSECT SELECT sno FROM student WHERE sdept = '电子系';//查询计算机系和电子系的学生学号
+\end{lstlisting}
+\subsection{VIEW 视图}
+视图是一个虚拟表, 由一个或多个表的行或列组成, 与基本表不同, 视图不存储数据, 而是根据定义视图的查询语句动态生成数据,无法对视图进行增删改操作。
+\begin{lstlisting}
+CREATE VIEW 视图名 AS SELECT 列名1, 列名2, ..., 列名n FROM 表名1, 表名2, ..., 表名n WHERE 条件;
+\end{lstlisting}
+eg:
+\begin{lstlisting}
+CREATE VIEW student_view AS SELECT sno, sname, ssex, sage, sdept FROM student WHERE sdept = '计算机系';//创建计算机系学生视图
+\end{lstlisting}
+
