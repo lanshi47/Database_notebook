@@ -1,0 +1,162 @@
+\section{关系语言}
+\subsection{关系代数}
+
+\subsubsection{集合运算}
+\begin{itemize}
+    \item 并: 
+    \[
+    R \cup S = \{t \mid t \in R \vee t \in S\}
+    \]
+    \item 差: 
+    \[
+    R - S = \{t \mid t \in R \wedge t \notin S\}
+    \]
+    \item 交: 
+    \[
+    R \cap S = \{t \mid t \in R \wedge t \in S\}
+    \]
+    \item 笛卡尔积: 
+    \[
+    R \times S = \{t \mid t = t_1 \cup t_2,\; t_1 \in R,\; t_2 \in S\}
+    \]
+\end{itemize}
+
+\subsubsection{基本关系运算}
+\begin{itemize}
+    \item 选择:
+    \[
+    \sigma_{\text{条件}}(R)
+    \]
+    \item 投影:
+    \[
+    \pi_{\text{属性列表}}(R)
+    \]
+\end{itemize}
+
+\subsubsection{连接运算}
+\begin{itemize}
+    \item 连接: $R \bowtie S$
+    \begin{itemize}
+        \item 等值连接: 
+        \[
+        R \bowtie_{R.A = S.B} S
+        \]
+        设 $R$ 和 $S$ 分别为关系模式 $R(A_1, A_2, \ldots, A_n)$ 和 $S(B_1, B_2, \ldots, B_m)$，连接条件为 $R.A = S.B$。
+        \item 自然连接:
+        \[
+        R \bowtie S
+        \]
+        系统自动使用 $R$ 与 $S$ 中同名的公共属性进行连接。
+        \item Theta连接: 
+        \[
+        R \bowtie_{\theta} S
+        \]
+        其中 $\theta$ 为任意布尔表达式，如 $R.A > S.B$。
+        \item 外连接:
+        \begin{itemize}
+            \item 左外连接:
+            \[
+            R \ \text{⟕}\ S
+            \]
+            返回 $R$ 中所有元组，对于在 $S$ 中没有匹配的元组，用空值（NULL）填充。
+            \item 右外连接:
+            \[
+            R \ \text{⟖}\ S
+            \]
+            返回 $S$ 中所有元组，对于在 $R$ 中没有匹配的元组，用空值填充。
+            \item 全外连接:
+            \[
+            R \ \text{⟗}\ S
+            \]
+            返回 $R$ 和 $S$ 中所有元组，对于没有匹配的一方用空值填充。
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{除运算}
+\begin{itemize}
+    \item 除运算:
+    \[
+    R \div S
+    \]
+    设 $R$ 为关系模式 $R(A_1, A_2, \ldots, A_n)$，$S$ 为关系模式 $S(B_1, B_2, \ldots, B_m)$，且 $S \subseteq R$（即 $S$ 中的属性均属于 $R$），令 $T = R - S$，则得到：
+    \[
+    R \div S = \pi_T(R) - \pi_T\Big((\pi_T(R) \times S) - R\Big)
+    \]
+    即返回所有在 $R$ 中出现的 $T$ 元组，使得对于 $S$ 中的每个元组都存在与之联结的记录。
+\end{itemize}
+
+\subsubsection{关系代数解题方法}
+
+\paragraph{常规解题方法 (求几个属性的特定值)}
+格式一般为:
+\[
+\pi_{\text{属性列表}}(\sigma_{\text{条件}}(R))
+\]
+步骤：
+\begin{enumerate}
+    \item 根据题目要求确定选择条件（通常是某属性等于常数）。
+    \item 根据需要投影出指定的属性。
+\end{enumerate}
+
+\paragraph{除运算解题方法}
+例如：设 A 为学生选课表，B 为课程信息表，要求求选了所有课程的学生学号。
+\begin{enumerate}
+    \item 求出 $R$ 中除课程号外的属性（例如学生学号）构成集合 $T$。
+    \item 构造笛卡尔积 $T \times B$，并计算差集 $(T \times B) - R$，找出哪些组合在选课表中没有出现。
+    \item 利用公式：
+    \[
+    \pi_T(R) - \pi_T\Big((T \times B) - R\Big)
+    \]
+    得到所要求的学生学号。
+\end{enumerate}
+
+\paragraph{差运算解题方法}
+格式一般为:
+\[
+R - S
+\]
+步骤：
+\begin{enumerate}
+    \item 求出 $R$ 中所有相关属性的元组集合。
+    \item 求出 $S$ 中的元组集合。
+    \item 用 $R - S$ 得到在 $R$ 中出现而在 $S$ 中未出现的元组。
+\end{enumerate}
+例如：设 A 为学生成绩表，要求求“没有任何一门课程及格的学生姓名”。
+\begin{enumerate}
+    \item 求出学生成绩表中所有学生的姓名：
+    \[
+    \pi_{\text{姓名}}(student)
+    \]
+    \item 求出所有及格（成绩 $\geq 60$）学生的姓名：
+    \[
+    \pi_{\text{姓名}}(\sigma_{\text{成绩} \geq 60}(student))
+    \]
+    \item 运用差集得到没有及格的学生姓名：
+    \[
+    \pi_{\text{姓名}}(student) - \pi_{\text{姓名}}(\sigma_{\text{成绩} \geq 60}(student))
+    \]
+\end{enumerate}
+
+\paragraph{其它例题}
+\begin{enumerate}
+    \item 查 student 表中 IS 系的全体学生的学号和姓名：
+    \begin{enumerate}
+        \item 从 student 表中投影出学号和姓名。
+        \item 选择出所在系为 IS 的记录。
+    \end{enumerate}
+    表达式：
+    \[
+    \pi_{\text{学号, 姓名}}(\sigma_{\text{所在系} = \text{IS}}(student))
+    \]
+    
+    \item 查 student 表中学号为 1 的学生的姓名和所在系：
+    \begin{enumerate}
+        \item 从 student 表中投影出学号、姓名和所在系。
+        \item 选择学号为 1 的记录。
+    \end{enumerate}
+    表达式：
+    \[
+    \pi_{\text{姓名, 所在系}}(\sigma_{\text{学号} = 1}(student))
+    \]
+\end{enumerate}案:$\pi_{\text{姓名, 所在系}}(\sigma_{\text{学号} = 1}(student))$.

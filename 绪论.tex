@@ -1,0 +1,44 @@
+
+
+\section{第一章:绪论}
+
+\subsection{数据库的4个基本概念}
+\begin{enumerate}
+    \item 数据data
+    \item 数据库database,DB
+    \item 数据库管理系统DBMS
+    \item 数据库系统DBS
+\end{enumerate}
+\subsection{数据库系统的特点}
+\begin{enumerate}
+    \item 结构化
+    \item 共享性高,低冗余,易扩充
+    \item 数据独立性高:物理;逻辑
+    \item 由DBMS统一管理和控制
+\end{enumerate}
+\subsection{数据模型}
+\begin{enumerate}
+    \item 概念模型-E-R图
+    \item 逻辑模型--关系模型
+    \item 物理模型
+\end{enumerate}
+\subsection{数据模型的组成要素:数据结构,数据操作,数据的完整性约束条件}
+\begin{enumerate}
+    \item 数据结构-静态
+    \item 数据操作-动态
+    \item 完整性约束条件
+\end{enumerate}
+\subsection{\texorpdfstring{\color{red}\textbf{重点:数据库系统的三级模式结构:外模式,模式(逻辑模式),内模式}}{重点:数据库系统的三级模式结构:外模式,模式(逻辑模式),内模式}}
+\begin{enumerate}
+    \item 外模式是用户或应用程序看到的局部数据逻辑结构，也称为用户视图。
+    每个外模式为特定用户组定制，屏蔽了数据库的复杂结构。
+    例如，不同用户可能通过不同的外模式访问同一数据库的不同部分。
+    \item 模式是数据库的全局逻辑结构，定义所有数据实体、属性、关系及约束（如主键、外键）。例如，包含所有表的结构及其联系，是数据库设计的核心蓝图。
+    \item 内模式描述数据的物理存储方式，如文件组织、索引结构、数据压缩等。例如，决定数据以B+树索引存储，或使用堆文件方式。
+\end{enumerate}
+外模式是用户视角，模式是全局逻辑蓝图，内模式是物理存储细节。
+\subsection{数据库的二级印象功能与逻辑独立性}
+\begin{enumerate}
+    \item 外模式/模式:保证了数据的逻独立性
+    \item 模式/内模式:保证了~物理独立性
+\end{enumerate}

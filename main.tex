@@ -1,0 +1,79 @@
+\documentclass[UTF8,a4paper,12pt,autoindent=true,fontset=none,zihao=-4,scheme=chinese,space=auto]{ctexart}
+\usepackage{bookmark}%书签
+\setCJKmainfont{SimSun}[BoldFont={SimHei}, ItalicFont={KaiTi}, BoldItalicFont={FangSong}]  % 设置SimSun为主中文字体, 加粗, 斜体, 加粗斜体.
+\setmainfont{Times New Roman}[BoldFont={Times New Roman Bold}, ItalicFont={Times New Roman Italic}, BoldItalicFont={Times New Roman Bold Italic}]  % 设置Times New Roman为主英文字体, 加粗, 斜体, 加粗斜体.
+\usepackage{amsmath}%数学公式
+\usepackage{amssymb}%数学符号
+\usepackage{mathrsfs}%花体
+\usepackage{amsfonts}%字体
+\usepackage{amsthm}%定理
+\usepackage{enumitem}%列表
+\usepackage{bm}%加粗
+\usepackage{cite}%引用
+\usepackage{hyperref}%超链接
+\usepackage{url}%超链接
+\usepackage{booktabs}%三线表
+\usepackage{caption}%标题
+\usepackage{float}%图片位置
+\usepackage{xcolor}%颜色
+\usepackage{graphicx}%插入图片
+\usepackage{listings}%插入代码
+% 设置代码块样式
+\lstset{
+    basicstyle=\ttfamily,
+    columns=fullflexible,
+    frame=single,
+    breaklines=true,
+    postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+    language=SQL,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},    
+    rulecolor=\color{black!30},%边框颜色
+    stringstyle=\color{red},
+    escapeinside={\%*}{*)},
+    showstringspaces=false,
+    numbers=left,
+    numberstyle=\tiny,
+    captionpos=b % 设置标题位置, b表示在底部
+}
+%设置正文样式, 1.5倍行距, 段前段后0.5行, 段落首行缩进2字符
+\linespread{1.5}
+\setlength{\parskip}{0.5\baselineskip}
+\setlength{\parindent}{2em}
+%设置三线表样式
+\setlength{\heavyrulewidth}{1.5pt}
+\setlength{\cmidrulewidth}{0.75pt}
+\setlength{\lightrulewidth}{0.5pt}
+
+
+\begin{document}
+\begin{titlepage}
+    \centering % 确保居中对齐
+    % 居中封面内容
+    \vspace{2cm} % 插入垂直间距
+    {\Huge \textbf{数据库笔记}} \\
+    \vspace{1.5cm}
+    {\Large 烂石} \\
+    \vspace{2cm}
+    % 插入 Logo 图片
+    \begin{flushleft}
+        \centering % 确保居中对齐
+        \includegraphics[width=0.5\textwidth]{image/logo.jpg} % 左上角 Logo，调整宽度
+    \end{flushleft}
+    \vfill
+    {\large \today}
+\end{titlepage}
+\include{绪论}
+\include{数据库安全性(授权)}
+\include{数据库完整性}
+\include{数据库编程}
+\include{数据库设计的步骤}
+\include{数据库恢复技术}
+\include{并发控制}
+\include{关系理论}
+\include{关系语言}
+\include{SQL语句}
+\include{事务调度}
+\include{数据库设计}
+\end{document}
+

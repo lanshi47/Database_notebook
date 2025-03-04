@@ -1,0 +1,87 @@
+\section{事务调度}
+\subsection{事务调度的准则}
+\begin{enumerate}[label=(\arabic*)]
+    \item 一组事务的调度必须保证:
+    \begin{enumerate}[label=\alph*.]
+        \item 包含的每个事务的操作指令.
+        \item 事务的操作指令的执行顺序.
+    \end{enumerate}
+    \item 并行事务的调度必须保证:
+    \begin{enumerate}[label=\alph*.]
+        \item 可串行化.
+        \item 事务的操作指令的执行结果与它们在某个串行调度中的执行结果相同.
+    \end{enumerate}
+    \item 判断一个调度是否可串行化的充分条件:
+    \begin{enumerate}[label=\alph*.]
+        \item 冲突可串行化.
+        \item 冲突操作: 两个事务中的操作指令, 一个读, 一个写, 且操作的数据对象相同.
+        \item 一个调度是冲突可串行化的, 当且仅当它是冲突可串行调度.
+    \end{enumerate}
+\end{enumerate}
+\subsection{封锁}
+\begin{enumerate}[label=(\arabic*)]
+    \item X锁: 读写锁, 用于写操作.
+    \item S锁: 读锁, 用于读操作.
+    \item 封锁协议:
+    \begin{enumerate}[label=\alph*.]
+        \item 一级封锁协议: 写前加X锁, 读写后解锁,可防止丢失更新.
+        \item 二级封锁协议: 写前加X锁, 读前加S锁, 读完释放S锁,事务结束后解锁, 可防止丢失更新和读脏数据.
+        \item 三级封锁协议: 读前加S锁, 读写前加X锁, 读写后解锁, 可防止丢失更新, 读脏数据和不可重复读.
+        \par 注意:幻读和不可重复读的区别在于, 幻读是由于插入操作引起的, 不可重复读是由于更新操作引起的.
+    \end{enumerate}
+    \item 两段锁协议(2PL): 事务的封锁和解锁操作必须在事务的开始和结束时进行.
+\end{enumerate}
+eg. A的初始值为20, B的初始值为10, X,Y为临时变量,X=R(A)表示从A中读取数据到X中, X=X-10表示X减10, W(A,X)表示将X写入A中,
+W(A，X)表示将X写入A中, Y=R(B)表示从B中读取数据到Y中, Y=Y*X表示Y乘以X, W(B,Y)表示将Y写入B中.
+事务T1和T2的操作序列如下:
+\begin{table}[H] 
+    \centering
+    \begin{tabular}{cc} % 去掉 | 符号
+        \toprule % 顶部横线
+        T1 & T2  \\
+        \midrule % 中间横线
+        X=R(A) &  \\
+        Y=R(B) & \\
+        & X=R(A) \\
+        & X=X-10 \\
+        X=X+Y & \\
+        & W(A,X) \\
+        & Y=R(B) \\
+        W(A,X) & \\
+        & Y=Y*X;\\
+        & W(B,Y) \\
+        \bottomrule % 底部横线
+    \end{tabular}
+\end{table}
+Q1:给出图中所示的执行结果(A,B的值),判定其是否正确,并说明理由.
+\par 最终结果,A=20,B=200.
+
+Q2:加入适当的Xlock()和Unlock()操作,要求执行两段锁协议,且每个事务首条语句的请求时间与图示调度一致,请重写该调度,并给出执行结果.
+\par 调度表格如下:
+\begin{table}[H] 
+    \centering
+    \begin{tabular}{cc} % 去掉 | 符号
+        \toprule % 顶部横线
+        T1 & T2  \\
+        \midrule % 中间横线
+        Xlock(A) &  \\
+        X=R(A) &  \\
+        & Xlock(A) \\
+        Xlock(B) & \\
+        Y=R(B) & \\
+        X=X+Y & \\
+        W(A,X) & \\
+        Unlock(A) & \\
+        Unlock(B) & \\
+        & X=X-10 \\
+        & W(A,X) \\
+        & Xlock(B) \\
+        & Y=R(B) \\
+        & Y=Y*X;\\
+        & W(B,Y) \\
+        & Unlock(A) \\
+        & Unlock(B) \\
+        \bottomrule % 底部横线
+    \end{tabular}
+\end{table}
+最终结果,A=20,B=200.
