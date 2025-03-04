@@ -29,5 +29,59 @@
         \item 三级封锁协议: 读前加S锁, 读写前加X锁, 读写后解锁, 可防止丢失更新, 读脏数据和不可重复读.
         \par 注意:幻读和不可重复读的区别在于, 幻读是由于插入操作引起的, 不可重复读是由于更新操作引起的.
     \end{enumerate}
-    \item 两段锁协议: 事务的封锁和解锁操作必须在事务的开始和结束时进行.
+    \item 两段锁协议(2PL): 事务的封锁和解锁操作必须在事务的开始和结束时进行.
 \end{enumerate}
+eg. A的初始值为20, B的初始值为10, X,Y为临时变量,X=R(A)表示从A中读取数据到X中, X=X-10表示X减10, W(A,X)表示将X写入A中,
+W(A，X)表示将X写入A中, Y=R(B)表示从B中读取数据到Y中, Y=Y*X表示Y乘以X, W(B,Y)表示将Y写入B中.
+事务T1和T2的操作序列如下:
+\begin{table}[H] 
+    \centering
+    \begin{tabular}{cc} % 去掉 | 符号
+        \toprule % 顶部横线
+        T1 & T2  \\
+        \midrule % 中间横线
+        X=R(A) &  \\
+        Y=R(B) & \\
+        & X=R(A) \\
+        & X=X-10 \\
+        X=X+Y & \\
+        & W(A,X) \\
+        & Y=R(B) \\
+        W(A,X) & \\
+        & Y=Y*X;\\
+        & W(B,Y) \\
+        \bottomrule % 底部横线
+    \end{tabular}
+\end{table}
+Q1:给出图中所示的执行结果(A,B的值),判定其是否正确,并说明理由.
+\par 最终结果,A=110,B=100.
+
+Q2:加入适当的Xlock()和Unlock()操作,要求执行两段锁协议,且每个事务首条语句的请求时间与图示调度一致,请重写该调度,并给出执行结果.
+\par 调度表格如下:
+\begin{table}[H] 
+    \centering
+    \begin{tabular}{cc} % 去掉 | 符号
+        \toprule % 顶部横线
+        T1 & T2  \\
+        \midrule % 中间横线
+        Xlock(A) &  \\
+        X=R(A) &  \\
+        & Xlock(A) \\
+        Xlock(B) & \\
+        Y=R(B) & \\
+        X=X+Y & \\
+        W(A,X) & \\
+        Unlock(A) & \\
+        Unlock(B) & \\
+        & X=X-10 \\
+        & W(A,X) \\
+        & Ylock(B) \\
+        & Y=R(B) \\
+        & Y=Y*X;\\
+        & W(B,Y) \\
+        & Unlock(A) \\
+        & Unlock(B) \\
+        \bottomrule % 底部横线
+    \end{tabular}
+\end{table}
+最终结果,A=20,B=200.
