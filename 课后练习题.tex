@@ -3,6 +3,8 @@
 \usepackage[UTF8]{ctex} % 中文支持
 \usepackage{geometry} % 页面设置
 \usepackage{graphicx}
+\usepackage{amssymb} % For join symbol
+\usepackage{amsmath}
 \geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm} % 页边距
 
 % 封面设置
@@ -31,6 +33,30 @@
 \end{titlepage}
 
 % 正文内容
+\section{ER图相关习题}
+\section{关系代数运算相关习题}
+例题:现有关系S(S\#,SNAME,AGE,SEX)),C(C\#,CNAME,TEACHER)和SC(S\#,C\#,GRADE),试用表达式表示以下查询语句:
+第一个问题:查询至少选修"程军"老师所授全部课程的学生姓名(SNAME);
+解析:有三个部分,要查询"程军"老师的全部课程;要查询学生的选课记录,包括学号和课程号;要查询学生的姓名.
+至少表示要查询选修了全部课程的学生,即选修了"程军"老师的全部课程的学生.
+所以,首先要找到"程军"老师的全部课程,然后找到选修了这些课程的学生,最后找到这些学生的姓名.
+这个查询可以分为三个部分:
+1.找到"程军"老师的全部课程:\\
+\begin{equation}
+    \pi_{(C\#(\sigma_(TEACHER='\text{程军}')(C)))}
+\end{equation}
+2.学生选课记录:\\
+\begin{equation}
+    \pi_{S\# C\#(SC)}
+\end{equation}
+3.筛选学生:
+\begin{equation}
+    {\pi_{S\#,C\#(SC)}}\div{\pi_{(C\#(\sigma_(TEACHER='\text{程军}')(C)}}
+\end{equation}
+综合以上三个部分,可以得到整个查询的表达式:\\
+\begin{equation}
+    \pi_{\text{SNAME}} \Big( S \Join \big( \pi_{\text{S\#, C\#}}(SC) \div \pi_{\text{C\#}}( \sigma_{\text{TEACHER='程军'}}(C) ) \big) \Big)
+\end{equation}
 
 
 \end{document}
