@@ -2,9 +2,27 @@
 \documentclass[12pt,a4paper]{article}
 \usepackage[UTF8]{ctex} % 中文支持
 \usepackage{geometry} % 页面设置
+\usepackage{xcolor} % Color support for listings
 \usepackage{graphicx}
 \usepackage{amssymb} % For join symbol
 \usepackage{amsmath}
+\usepackage{listings}
+% 设置代码块样式
+\lstset{
+    basicstyle=\ttfamily,
+    columns=fullflexible,
+    frame=single,
+    breaklines=true,
+    postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+    language=SQL,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},    
+    rulecolor=\color{black!30},%边框颜色
+    stringstyle=\color{red},
+    escapeinside={\%*}{*)},
+    showstringspaces=false,
+    captionpos=b % 设置标题位置, b表示在底部
+}
 \geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm} % 页边距
 
 % 封面设置
@@ -57,6 +75,69 @@
 \begin{equation}
     \pi_{\text{SNAME}} \Big( S \Join \big( \pi_{\text{S\#, C\#}}(SC) \div \pi_{\text{C\#}}( \sigma_{\text{TEACHER='程军'}}(C) ) \big) \Big)
 \end{equation}
+ 
+\section{SQL语句}
+1. 设学生课程数据库中有三个关系：
+
+   学生关系 S (S\#, SNAME, AGE, SEX)
+    学习关系 SC (S\#, C\#, GRADE)
+   课程关系 C (C\#, CNAME)
+
+   其中 S\#, C\#, SNAME, AGE, SEX, GRADE, CNAME 分别表示学号、课程号、姓名、年龄、性别、成绩和课程名。
+
+用 SQL 语句表达以下操作：
+
+1. 检索选修课程名称为 "MATHS" 的学生学号与姓名。
+答:\begin{lstlisting}
+    SELECT DISTINCT S.S#, S.SNAME
+    FROM S
+    JOIN SC ON S.S# = SC.S#
+    JOIN C ON SC.C# = C.C#
+    WHERE C.CNAME = 'MATHS';
+\end{lstlisting}
+2. 检索至少学习了课程号为 "C1" 和 "C2" 的学生的学号。
+\begin{lstlisting}
+    SELECT S# FROM SC
+    WHERE C# IN("C1","C2")
+    GROUP BY S#
+    HAVING COUNT (DISTINCT C#)=2
+\end{lstlisting}
+3. 检索年龄在 18 到 20 之间（含 18 和 20）的女性学生的学号、姓名和年龄。
+\begin{lstlisting}
+    SELECT S#, SNAME, AGE
+    FROM S
+    WHERE AGE BETWEEN 18 AND 20
+      AND SEX = '女'; 
+\end{lstlisting}
+4. 检索平均成绩达到 80 的学生学号和平均成绩。
+\begin{lstlisting}
+    SELECT S#,AVG(GRADE) AS AVG_GRADE
+    FROM SC
+    GROUP BY S#
+    HAVING AVG(GRADE)>=80;
+\end{lstlisting}
+5. 检索选修了全部课程的学生姓名。
+\begin{lstlisting}
+    SELECT S.SNAME
+    FROM S 
+    WHERE NOT EXISTS(
+        SELECT C.C#
+        FROM C 
+        WHERE S# NOT IN(
+            SELECT *
+            FROM SC
+            WHERE S.S#=SC.S#
+            AND C.C#=SC.C#
+        )
+    )
+\end{lstlisting}
+6. 检索选修了三个课程以上的学生的学号。
+\begin{lstlisting}
+    SELECT S#
+    FROM SC
+    GROUP BY S#
+    HAVING COUNT(DISTINCT C#) > 3 
+\end{lstlisting}
 
 
 \end{document}
