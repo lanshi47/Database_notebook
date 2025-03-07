@@ -6,6 +6,8 @@
 \usepackage{amssymb} % For join symbol
 \usepackage{amsmath}
 \usepackage{listings}
+\usepackage{longtable}
+\usepackage{booktabs} % 添加booktabs宏包以支持三线表
 % 设置代码块样式
 \lstset{
     basicstyle=\ttfamily,
@@ -76,7 +78,7 @@
 \end{equation}
  
 \section{SQL语句}
-\textbf{题1:}\\
+\subsection{题1:}\\
 1. 设学生课程数据库中有三个关系：
 
    学生关系 S (S\#, SNAME, AGE, SEX)
@@ -138,7 +140,7 @@
     GROUP BY S#
     HAVING COUNT(DISTINCT C#) > 3 
 \end{lstlisting}
-\textbf{题2:学生-课程数据库中包括三个表：}\\
+\subsection{题2:学生-课程数据库中包括三个表：}\\
 \begin{itemize}
     \item 学生表：\textbf{Student} (\texttt{Sno}, \texttt{Sname}, \texttt{Sex}, \texttt{Sage}, \texttt{Sdept})
     \item 课程表：\textbf{Course} (\texttt{Cno}, \texttt{Cname}, \texttt{Ccredit})
@@ -147,7 +149,7 @@
 
 其中 \texttt{Sno}、\texttt{Sname}、\texttt{Sex}、\texttt{Sage}、\texttt{Sdept}、\texttt{Cno}、\texttt{Cname}、\texttt{Ccredit}、\texttt{Grade} 分别表示学号、姓名、性别、年龄、所在系名、课程号、课程名、学分和成绩。
 
-\subsection*{试用 SQL 语言完成下列操作：}
+\textbf{试用 SQL 语言完成下列操作：}
 
 \begin{enumerate}
     \item 查询选修课程包括 “1042” 号学生所学的课程的学生学号。\\
@@ -188,4 +190,70 @@
         WHERE Course.Cname = '数据库';
     \end{lstlisting}
 \end{enumerate}
+
+\section{关系模式}
+\subsection{题1:已知学生关系模式如下:}
+\par 关系模式 $S(Sno, Sname, SD, Sdname, Course, Grade)$
+
+其中：\par  
+$Sno$ 学号，  \par
+$Sname$ 姓名，  \par
+$SD$ 系名，  \par
+$Sdname$ 系主任名，\par
+$Course$ 课程，  \par
+$Grade$ 成绩。  
+
+\begin{enumerate}
+  \item 写出关系模式 $S$ 的基本函数依赖和主码。
+  \begin{center}
+  $Sno \rightarrow Sname $\\
+  $Sno \rightarrow Course$\\
+  $(Sno,Course) \rightarrow Grade$\\
+  $Sno \rightarrow SD$\\
+  $SD \rightarrow Sdname$
+  \par 主码为(Sno,Course)
+  \end{center}
+  \item 原关系模式 $S$ 为几范式？为什么？分解成高一级范式，并说明为什么？
+  原关系模式为1NF,Grade对主码存在完全依赖;
+  其他非主码候选健对主码存在部分依赖.
+  2NF如下所示:\par
+  \begin{center}
+    
+  $S1(Sno,Sname,SD,Sdname)$\\
+  $S2(Sno,Course,Grade)$\\
+  \end{center}
+  \item 将关系模式分解成 3NF，并说明为什么。
+  S1存在传递依赖,还可以继续分解
+  3NF如下所示:\par
+  \begin{center}
+    
+  $S11(Sno,Sname,SD)$\\
+  $S12(SD,Sdname)$\\
+  $S2(Sno,Course,Grade)$
+  \end{center}
+\end{enumerate}
+\subsection{题2:设有如下关系 R}
+
+\begin{table}[htbp]
+    \centering
+    \caption{关系 R 的三线表表示}
+    \vskip 2mm
+    \begin{tabular}{ccc}
+        \toprule % 顶部粗线
+        \textbf{课程名} & \textbf{教师名} & \textbf{教师地址} \\ 
+        \midrule % 中间细线
+        C1 & 马千里 & D1 \\ 
+        C2 & 于得水 & D1 \\ 
+        C3 & 余快 & D2 \\ 
+        C4 & 于得水 & D1 \\ 
+        \bottomrule % 底部粗线
+    \end{tabular}
+\end{table}
+
+\begin{enumerate}
+    \item 它为几范式？为什么？
+    \item 是否存在删除操作异常？若存在，则说明是在什么情况下发生的？
+    \item 将它分解为高一级范式，分解后的关系是如何解决分解前可能存在的删除操作问题的？
+\end{enumerate}
+
 \end{document}
