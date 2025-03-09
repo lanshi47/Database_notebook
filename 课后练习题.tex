@@ -1,6 +1,6 @@
-% !TEX program = xelatex
-\documentclass[a4paper,12pt,UTF8]{ctexart}
+\documentclass[a4paper,12pt,UTF8,fontset=none]{ctexart}
 \usepackage{geometry} % 页面设置
+\usepackage{xeCJK}
 \usepackage{xcolor} % Color support for listings
 \usepackage{graphicx}
 \usepackage{amssymb} % For join symbol
@@ -8,6 +8,36 @@
 \usepackage{listings}
 \usepackage{longtable}
 \usepackage{booktabs} % 添加booktabs宏包以支持三线表
+\usepackage{placeins} 
+\usepackage{newtxtext,newtxmath}
+\usepackage{fontspec}
+\usepackage{titlesec}
+
+% 设置英文主字体为 Times New Roman
+\setmainfont{Times New Roman}[Path=D:/Program Files/MiKTeX/fonts/custom/, Extension=.otf]
+
+% 设置英文粗体字体为 Times New Roman Bold
+\newfontfamily\enboldfont{Times New Roman Bold}[Path=D:/Program Files/MiKTeX/fonts/custom/, Extension=.otf]
+
+% 设置中文正文字体为宋体
+\setCJKmainfont{SimSun}[Path=D:/Program Files/MiKTeX/fonts/custom/, Extension=.ttf]
+
+% 设置中文黑体字体
+\setCJKfamilyfont{zhhei}{SimHei}[Path=D:/Program Files/MiKTeX/fonts/custom/, Extension=.ttf]
+\newcommand{\heiti}{\CJKfamily{zhhei}}
+
+
+
+% 设置标题格式
+\titleformat{\section}
+  {\heiti\zihao{-3}\enboldfont}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\heiti\zihao{4}\enboldfont}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\heiti\zihao{-4}\enboldfont}{\thesubsubsection}{1em}{}
+
+
+
 % 设置代码块样式
 \lstset{
     basicstyle=\ttfamily,
@@ -45,7 +75,7 @@
     \vspace{1cm}
     {\large \today \par}
     \vspace{4cm}
-    \includegraphics[width=0.5\textwidth]{image/logo.jpg}
+    \includegraphics[width=0.5\textwidth]{images/logo.jpg}
     \vspace*{\fill}
     \thispagestyle{empty} % 封面不显示页码
     \newpage
@@ -78,7 +108,8 @@
 \end{equation}
  
 \section{SQL语句}
-\subsection{题1:}\\
+\subsection{题1:}
+
 1. 设学生课程数据库中有三个关系：
 
    学生关系 S (S\#, SNAME, AGE, SEX)
@@ -140,7 +171,8 @@
     GROUP BY S#
     HAVING COUNT(DISTINCT C#) > 3 
 \end{lstlisting}
-\subsection{题2:学生-课程数据库中包括三个表：}\\
+\subsection{题2:学生-课程数据库中包括三个表：}
+
 \begin{itemize}
     \item 学生表：\textbf{Student} (\texttt{Sno}, \texttt{Sname}, \texttt{Sex}, \texttt{Sage}, \texttt{Sdept})
     \item 课程表：\textbf{Course} (\texttt{Cno}, \texttt{Cname}, \texttt{Ccredit})
@@ -192,7 +224,7 @@
 \end{enumerate}
 
 \section{关系模式}
-\subsection{题1:已知学生关系模式如下:}
+\subsection*{题1:已知学生关系模式如下:}
 \par 关系模式 $S(Sno, Sname, SD, Sdname, Course, Grade)$
 
 其中：\par  
@@ -232,11 +264,11 @@ $Grade$ 成绩。
   $S2(Sno,Course,Grade)$
   \end{center}
 \end{enumerate}
-\subsection{题2:设有如下关系 R}
-
+\subsection*{题2:设有如下关系 R}
+\FloatBarrier
 \begin{table}[htbp]
     \centering
-    \caption{关系 R 的三线表表示}
+    \caption{关系 R}
     \vskip 2mm
     \begin{tabular}{ccc}
         \toprule % 顶部粗线
@@ -252,8 +284,104 @@ $Grade$ 成绩。
 
 \begin{enumerate}
     \item 它为几范式？为什么？
+    \par 2NF,存在传递依赖,\\$\text{课程名} \rightarrow \text{教师名}$\\
+    $\text{教师名} \rightarrow \text{教师地址}$\\
+    存在$\text{课程名} \rightarrow \text{教师地址}$的传递依赖;但又不存在部分函数依赖.
+    属于2NF
     \item 是否存在删除操作异常？若存在，则说明是在什么情况下发生的？
+    \par 存在,当删除课程名时,可能某些信息会全部丢失
     \item 将它分解为高一级范式，分解后的关系是如何解决分解前可能存在的删除操作问题的？
+    \par 转为3NF,消除传递依赖,分解原表为R1,R2
+    \begin{table}[htbp]
+        \centering
+        \caption{关系 R1}
+        \vskip 2mm
+        \begin{tabular}{ccc}
+            \toprule % 顶部粗线
+            \textbf{课程名} & \textbf{教师名}  \\ 
+            \midrule % 中间细线
+            C1 & 马千里  \\ 
+            C2 & 于得水  \\ 
+            C3 & 余快  \\ 
+            C4 & 于得水 \\ 
+            \bottomrule % 底部粗线
+        \end{tabular}
+    \end{table}
+    \begin{table}[htbp]
+        \centering
+        \caption{关系 R2}
+        \vskip 2mm
+        \begin{tabular}{ccc}
+            \toprule % 顶部粗线
+             \textbf{教师名} & \textbf{教师地址} \\ 
+            \midrule % 中间细线
+             马千里 & D1 \\ 
+             于得水 & D1 \\ 
+             余快 & D2 \\ 
+            \bottomrule % 底部粗线
+        \end{tabular}
+    \end{table}
 \end{enumerate}
+\FloatBarrier
+\subsection*{题3. 设某商业集团数据库中有一关系模式 R 如下：}
 
+   R (商店编号, 商品编号, 数量, 部门编号, 负责人)
+
+   如果规定：(1) 每个商店的每种商品只能在一个部门销售；(2) 每个商店的每个部门只有一个负责人；(3) 每个商店的每种商品只有一个库存数量。
+
+   试回答下列问题：
+
+   (1) 根据上述规定，写出关系模式 R 的基本函数依赖；
+   \begin{center}
+   $\text{部门编号} \rightarrow \text{负责人}$\\
+   $\text{商品编号} \rightarrow \text{数量}$\\
+   $(\text{商店编号,商品编号}) \rightarrow \text{部门编号}$\\
+   \end{center}
+
+   (2) 找出关系模式 R 的候选码；
+   \par (商店编号,商品编号)
+
+   (3) 试问关系模式 R 最高已经达到第几范式？为什么？
+   \par 2NF,存在$\mbox{(商店编号,商品编号)} \rightarrow \mbox{负责人}$的传递依赖.
+
+   (4) 如果 R 不属于 3NF，请将 R 分解成 3NF 模式集。
+   \par R1(商店编号,商品编号,部门编号,数量)
+
+   R2(商品编号,商店编号,负责人)
+\section{实体关系模型设计}
+
+   \subsection*{题1:设有如下实体：学生、学号、姓名、性别、年龄、选修课程名；教师：教师号、姓名、性别、职称、讲授课程编号；课程：编号、课程名、开课单位、任课教师号。}
+   
+   上述实体中存在如下关联：
+   
+   \begin{enumerate}
+       \item 一个学生可选择多门课程，一门课程可由多个学生选择；
+       \item 一个教师可讲授多门课程，一门课程可由多个教师讲授；
+       \item 一个单位有多个教师，一个教师只能属于一个单位。
+   \end{enumerate}
+   
+   试完成如下任务：
+   
+   \begin{enumerate}
+       \item 分别设计学生信息和教师信息的 E-R 图；
+       \item 将上述设计完成的 E-R 图合并成一个全局 E-R 图；
+       \par 题1,题2如图所示\ref{图5-1}
+       \FloatBarrier
+       \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.8\textwidth]{./images/题1-E-R图.jpg}
+        \caption{题目1的一二小问E-R图}
+        \label{图5-1}
+    \end{figure}
+    \FloatBarrier
+       \item 将该全局 E-R 图转换为对应的数据库逻辑结构。
+       \begin{lstlisting}
+        CREATE TABLE Student(
+            sno VARCHAR(20) PRIMARY KEY,
+            sname VARCHAR(50),
+            sex CHAR(1),
+            age INT
+        );
+       \end{lstlisting}
+   \end{enumerate}
 \end{document}
