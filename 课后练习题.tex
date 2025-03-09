@@ -12,6 +12,7 @@
 \usepackage{newtxtext,newtxmath}
 \usepackage{fontspec}
 \usepackage{titlesec}
+\usepackage{cleveref}
 
 % 设置英文主字体为 Times New Roman
 \setmainfont{Times New Roman}[Path=D:/Program Files/MiKTeX/fonts/custom/, Extension=.otf]
@@ -350,8 +351,13 @@ $Grade$ 成绩。
    R2(商品编号,商店编号,负责人)
 \section{实体关系模型设计}
 
-   \subsection*{题1:设有如下实体：学生、学号、姓名、性别、年龄、选修课程名；教师：教师号、姓名、性别、职称、讲授课程编号；课程：编号、课程名、开课单位、任课教师号。}
-   
+   \subsection*{题1:设有如下实体}
+   \begin{itemize}
+    \item 学生：学号、单位、姓名、性别、年龄、选修课程名；
+    \item 教师：教师号、姓名、性别、职称、讲授课程编号；
+    \item 课程：编号、课程名、开课单位、任课教师号；
+    \item 单位：单位名称、电话、教师号、教师名。
+\end{itemize}
    上述实体中存在如下关联：
    
    \begin{enumerate}
@@ -365,7 +371,7 @@ $Grade$ 成绩。
    \begin{enumerate}
        \item 分别设计学生信息和教师信息的 E-R 图；
        \item 将上述设计完成的 E-R 图合并成一个全局 E-R 图；
-       \par 题1,题2如图所示\ref{图5-1}
+       \par 题1,题2如\cref{图5-1}所示
        \FloatBarrier
        \begin{figure}[htbp]
         \centering
@@ -375,13 +381,11 @@ $Grade$ 成绩。
     \end{figure}
     \FloatBarrier
        \item 将该全局 E-R 图转换为对应的数据库逻辑结构。
-       \begin{lstlisting}
-        CREATE TABLE Student(
-            sno VARCHAR(20) PRIMARY KEY,
-            sname VARCHAR(50),
-            sex CHAR(1),
-            age INT
-        );
-       \end{lstlisting}
+      单位(单位名,电话)\\
+      课程(课程编号,课程名,单位名)\\
+      学生(学号,单位名.姓名,性别,年龄)\\
+      教师(教师号,姓名,性别,职称,单位名)\\
+      选修(学号,课程编号)\\
+      讲授(教师号,课程编号)\\
    \end{enumerate}
 \end{document}
