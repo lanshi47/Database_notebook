@@ -1,0 +1,665 @@
+\documentclass[a4paper,12pt,UTF8,fontset=none]{ctexart}
+\usepackage{geometry} % 页面设置
+\usepackage{xeCJK}
+\usepackage{enumitem}
+\usepackage{xcolor} % Color support for listings
+\usepackage{graphicx}
+\usepackage{amssymb} % For join symbol
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{longtable}
+\usepackage{booktabs} % 添加booktabs宏包以支持三线表
+\usepackage{array}      % 列格式控制
+\usepackage{caption}    % 表格标题格式
+\usepackage{placeins} 
+\usepackage{newtxtext,newtxmath}
+\usepackage{fontspec}
+\usepackage{titlesec}
+\usepackage{cleveref}
+
+% 设置英文主字体为 Times New Roman
+\setmainfont{Times New Roman}[Path=D:/Program Files/MiKTeX/fonts/custom/, Extension=.otf]
+
+% 设置英文粗体字体为 Times New Roman Bold
+\newfontfamily\enboldfont{Times New Roman Bold}[Path=D:/Program Files/MiKTeX/fonts/custom/, Extension=.otf]
+
+% 设置中文正文字体为宋体
+\setCJKmainfont{SimSun}[Path=D:/Program Files/MiKTeX/fonts/custom/, Extension=.ttf]
+
+% 设置中文黑体字体
+\setCJKfamilyfont{zhhei}{SimHei}[Path=D:/Program Files/MiKTeX/fonts/custom/, Extension=.ttf]
+\newcommand{\heiti}{\CJKfamily{zhhei}}
+
+
+% 自定义编号格式
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+% 设置标题格式
+\titleformat{\section}
+  {\centering\heiti\zihao{-3}\enboldfont}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\heiti\zihao{4}\enboldfont}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\heiti\zihao{-4}\enboldfont}{\thesubsubsection}{1em}{}
+
+
+
+% 设置代码块样式
+\lstset{
+    basicstyle=\ttfamily,
+    columns=fullflexible,
+    frame=single,
+    breaklines=true,
+    postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+    language=SQL,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},    
+    rulecolor=\color{black!30},%边框颜色
+    stringstyle=\color{red},
+    escapeinside={\%*}{*)},
+    showstringspaces=false,
+    captionpos=b % 设置标题位置, b表示在底部
+}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm} % 页边距
+
+
+\begin{document}
+
+% 制作封面页
+\begin{titlepage}
+    \centering
+    \vspace*{\fill}
+    {\LARGE\bfseries 数据库系统原理课程\par}
+    \vspace{2cm}
+    {\Huge\bfseries 往年真题\par}
+    \vspace{2cm}
+    {\Large 烂石\par}
+    \vspace{1cm}
+    {\large \today \par}
+    \vspace{4cm}
+    \includegraphics[width=0.5\textwidth]{images/logo.jpg}
+    \vspace*{\fill}
+    \thispagestyle{empty} % 封面不显示页码
+    \newpage
+\end{titlepage}
+
+% 正文内容
+\section{选择题(40 points)}
+\subsection{日志文件的作用}
+日志文件是数据库系统中至关重要的组件，主要用于保障事务的ACID特性（原子性、一致性、隔离性、持久性） ，确保数据的一致性和系统故障后的恢复能力。
+\subsection{为什么要应用数据库}
+\begin{itemize}
+    \item 共享与高效利用
+    \item 减少冗余与提高一致性
+    \item 支持并发与安全性
+    \item 数据独立性与事务处理
+\end{itemize}
+\subsection{DB/DBS/DBMS之间关系}
+\subsubsection{层级关系}
+DBS（系统） > DBMS（软件） > DB（数据）
+
+DB是数据存储，DBMS是管理DB的软件，DBS是整体系统。
+\subsubsection{核心功能区分}
+DBMS：提供数据管理功能（如事务、安全、查询优化）。
+DBS：包含DBMS、DB、应用程序及用户，是完整的数据管理解决方案。
+\subsubsection{常见误区}
+混淆DB和DBMS（如认为“数据库就是MySQL”）。
+认为DBS仅包含DB和DBMS，忽略应用程序和用户。
+\section{填空题 30 points}
+\subsection{逻辑独立性是什么?}
+逻辑独立性是指当数据的逻辑结构（概念模式）改变时，应用程序不需要修改。
+\subsection{把一个sql语句转化成关系代数}
+\subsubsection{填空标准答案示例：}
+将SQL语句 `SELECT A, B FROM R WHERE C > 5` 转换为关系代数表达式：  \\
+π<sub>A,B</sub>(σ<sub>C>5</sub>(R))\\
+（其中：  
+- π 表示投影（对应SELECT字段），  \\
+- σ 表示选择（对应WHERE条件），  \\
+- R 是关系名。）\\
+
+\subsubsection{常见填空题考点:}
+1. SQL的`SELECT`对应关系代数的 投影（π）。  
+
+2. SQL的`WHERE`对应关系代数的 选择（σ）。
+
+3. SQL的`JOIN`对应关系代数的 连接（$\Join$）。  
+
+4. SQL的`GROUP BY`对应关系代数的 分组（Γ）。
+
+\subsection{关系范式}
+\subsubsection{关系范式填空题模板}
+\begin{enumerate}
+  \item 关系模型应满足一定的规范要求，称为\underline{关系范式（或规范化）}，其中最基本的三个范式是\underline{第一范式（1NF）}、\underline{第二范式（2NF）}、\underline{第三范式（3NF）}。
+  
+  \item 第一范式（1NF）要求关系模式中的每个属性的值域中\underline{不可再分}，即每个属性都是\underline{原子值}。
+  
+  \item 第二范式（2NF）要求关系模式必须满足\underline{1NF}，且非主属性完全函数依赖于\underline{候选键（或主键）}。
+  
+  \item 第三范式（3NF）要求关系模式必须满足\underline{2NF}，且非主属性对候选键不存在\underline{传递函数依赖}。
+  
+  \item 巴斯-科德范式（BCNF）要求关系模式中的每一个函数依赖X→Y，决定因素X必须包含\underline{候选键（或超键）}。
+  
+  \item 对于关系模式R，若R∈3NF且消除了非平凡的多值依赖，则R属于\underline{第四范式（4NF）}。
+  
+  \item 第五范式（5NF）又称为\underline{投影-连接范式（Projection-Join Normal Form）}，要求关系模式中不存在\underline{连接依赖}。
+\end{enumerate}
+
+\subsubsection{关键概念总结}
+\begin{table}[htbp]
+  \centering
+  \caption{数据库范式核心条件}
+  \label{tab:normal-forms}
+  \begin{tabular}{lp{0.8\textwidth}}
+  \toprule
+  \textbf{范式} & \textbf{核心条件} \\
+  \midrule
+  1NF & 每个属性的值域不可再分（原子性）。 \\
+  2NF & 满足1NF，且非主属性完全依赖于候选键。 \\
+  3NF & 满足2NF，且非主属性不传递依赖于候选键。 \\
+  BCNF & 满足3NF，且所有函数依赖的决定因素都是候选键。 \\
+  4NF & 满足BCNF，且不存在非平凡的多值依赖。 \\
+  5NF（PJNF/BC范式） & 满足4NF，且不存在非平凡的连接依赖。 \\
+  \bottomrule
+  \end{tabular}
+  \end{table}
+\subsubsection{常见考点}
+\noindent 范式之间的关系:
+
+每个更高范式都是前一个范式的超集（如：BCNF ⇒ 3NF ⇒ 2NF ⇒ 1NF）。
+
+\noindent 典型反例：
+
+违反2NF：如学生（学号，姓名，课程1，成绩1，课程2，成绩2），非主属性部分依赖主键。
+
+违反3NF：如部门（部门号，部门名，经理，经理电话），经理电话传递依赖于部门号。
+
+违反BCNF：如员工（项目，员工，技能），若项目→员工且员工→技能，则决定因素不包含候选键。
+
+\noindent 规范化的作用：
+
+消除数据冗余、插入异常、删除异常和更新异常。
+
+\subsection{ 插入异常、修改异常（更新异常）和删除异常 }
+\subsubsection{填空题模板}
+
+\begin{enumerate}
+    \item 插入异常是指\underline{\hspace{5cm}}，通常由于关系模式中存在\underline{\hspace{2cm}}或\underline{\hspace{2cm}}导致。
+    \begin{quote}
+        \textcolor{blue}{答案：无法插入某些有意义的数据行；部分函数依赖；传递函数依赖}
+    \end{quote}
+
+    \item 修改异常（更新异常）是指\underline{\hspace{5cm}}，例如修改某个属性值时需要\underline{\hspace{4cm}}，容易导致数据不一致。
+    \begin{quote}
+        \textcolor{blue}{答案：修改数据时需要修改多处冗余数据；修改多个元组}
+    \end{quote}
+
+    \item 删除异常是指\underline{\hspace{5cm}}，例如删除某个元组时可能同时丢失\underline{\hspace{4cm}}。
+    \begin{quote}
+        \textcolor{blue}{答案：删除元组时导致有用信息丢失；其他相关数据}
+    \end{quote}
+
+    \item 关系模式未规范化时，容易出现\underline{\hspace{2cm}}、\underline{\hspace{2cm}}和\underline{\hspace{2cm}}，这些是关系规范化要解决的核心问题。
+    \begin{quote}
+        \textcolor{blue}{答案：插入异常；修改（更新）异常；删除异常}
+    \end{quote}
+
+    \item 若关系模式中存在非主属性对候选键的传递依赖，则可能导致\underline{\hspace{2cm}}和\underline{\hspace{2cm}}。
+    \begin{quote}
+        \textcolor{blue}{答案：插入异常；删除异常}
+    \end{quote}
+
+    \item 规范化到\underline{\hspace{4cm}}可以消除非主属性对候选键的传递依赖，从而解决部分异常。
+    \begin{quote}
+        \textcolor{blue}{答案：第三范式（3NF）}
+    \end{quote}
+
+    \item 在关系模式中，如果存在多值依赖，则可能引发\underline{\hspace{3cm}}，需通过规范化到\underline{\hspace{3cm}}解决。
+    \begin{quote}
+        \textcolor{blue}{答案：插入异常；第四范式（4NF）}
+    \end{quote}
+\end{enumerate}
+
+\subsubsection{关键概念总结}
+\begin{table}[htbp]
+    \centering
+    \caption{数据库规范化异常类型表}
+    \begin{tabular}{p{3cm}p{6cm}p{6cm}}
+        \toprule
+        \textbf{异常类型} & \textbf{定义} & \textbf{示例} \\
+        \midrule
+        插入异常 & 无法插入某些有意义的数据行，因主键或外键约束导致 & 无法插入"课程"表中尚未存在的课程信息，因需要关联学生表的主键 \\
+        修改异常 & 修改数据时需要修改多处冗余数据，导致不一致或操作繁琐 & 修改"部门名称"需遍历所有员工记录，容易遗漏 \\
+        删除异常 & 删除元组时导致有用信息丢失（如删除学生记录时同时丢失其选课信息） & 删除一个学生记录时，该学生的选课记录也被删除，但选课信息可能需要保留 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsubsection{常见考点解析}
+\begin{itemize}
+    \item \textbf{异常产生的原因}：
+    \begin{itemize}
+        \item 插入异常：非主属性对主键存在部分依赖或传递依赖
+        \item 修改异常：冗余数据（如重复存储的部门名称）需要同时修改多处
+        \item 删除异常：主键关联的数据被级联删除，导致非主属性信息丢失
+    \end{itemize}
+
+    \item \textbf{规范化的作用}：
+    \begin{itemize}
+        \item 1NF到3NF：解决插入、修改、删除异常（通过消除非主属性的传递依赖）
+        \item BCNF：进一步消除决定因素非键的函数依赖
+        \item 4NF/5NF：解决多值依赖和连接依赖导致的异常
+    \end{itemize}
+
+    \item \textbf{典型反例}：
+    \begin{itemize}
+        \item 未规范化表：学生（学号，姓名，课程1，成绩1，课程2，成绩2）
+        \begin{itemize}
+            \item 插入异常：若学生未选满2门课程，无法插入
+            \item 删除异常：删除学生记录时，所有课程信息被删除
+        \end{itemize}
+        \item 规范化后：拆分为学生（学号，姓名）和选课（学号，课程，成绩），消除异常
+    \end{itemize}
+\end{itemize}
+\subsection{专门的关系运算，选择、投影、连接  、（除） }
+\subsubsection{填空题模板}
+
+\begin{enumerate}[itemsep=1.2em]
+    \item 选择运算（Selection）的符号是\underline{\hspace{2cm}}，其作用是\underline{\hspace{4cm}}。
+    \begin{quote}
+        \textcolor{blue}{答案：$\sigma$（西格玛）；从关系中筛选满足条件的元组（行）。}
+    \end{quote}
+
+    \item 投影运算（Projection）的符号是\underline{\hspace{2cm}}，其作用是\underline{\hspace{4cm}}。
+    \begin{quote}
+        \textcolor{blue}{答案：$\pi$（派）；从关系中选择特定的属性（列），并消除重复元组。}
+    \end{quote}
+
+    \item 连接运算（Join）分为\underline{\hspace{3cm}}和\underline{\hspace{3cm}}，其中自然连接要求\underline{\hspace{4cm}}。
+    \begin{quote}
+        \textcolor{blue}{答案：$\theta$连接（如等值连接、不等连接）；自然连接；连接条件为公共属性的等值，并且自动去除重复列。}
+    \end{quote}
+
+    \item $\theta$连接的符号是\underline{\hspace{2cm}}，其一般形式为$R$\underline{\hspace{2cm}}$S$。
+    \begin{quote}
+        \textcolor{blue}{答案：$\infty$（无穷符号）；$\sigma_{\text{<条件>}}(R\times S)$，但通常直接写为$R \Join_{\text{<条件>}} S$。}
+    \end{quote}
+
+    \item 除运算（Division）的符号是\underline{\hspace{2cm}}，其作用是\underline{\hspace{4cm}}。
+    \begin{quote}
+        \textcolor{blue}{答案：$\div$；用于查询满足“对于某个属性集的所有值，都存在对应的元组”的条件。}
+    \end{quote}
+
+    \item 自然连接要求两个关系有\underline{\hspace{3cm}}，而$\theta$连接可以基于\underline{\hspace{4cm}}进行连接。
+    \begin{quote}
+        \textcolor{blue}{答案：公共属性；任意属性间的条件（如等值、不等值）。}
+    \end{quote}
+
+    \item 投影运算的结果\underline{\hspace{1cm}}（是/否）自动去重，因为关系模型中元组是\underline{\hspace{2cm}}的。
+    \begin{quote}
+        \textcolor{blue}{答案：是；无序且唯一。}
+    \end{quote}
+
+    \item 关系$R \div S$的结果是\underline{\hspace{4cm}}，即$R$中满足\underline{\hspace{5cm}}的元组。
+    \begin{quote}
+        \textcolor{blue}{答案：$R$中在除数$S$的属性集上的所有组合均在$R$中存在对应元组；对于$S$的所有元组，$R$中存在元组与之匹配。}
+    \end{quote}
+\end{enumerate}
+
+\subsubsection{关键概念总结}
+\begin{table}[htbp]
+    \centering
+    \caption{关系代数运算对照表}
+    \begin{tabular}{p{2.5cm}p{1.5cm}p{5cm}p{4.5cm}}
+        \toprule
+        \textbf{运算} & \textbf{符号} & \textbf{作用} & \textbf{示例} \\
+        \midrule
+        选择 & $\sigma$ & 筛选满足条件的元组（行） & $\sigma_{\text{年龄}>20}(R)$：选择年龄大于20的元组 \\
+        投影 & $\pi$ & 提取指定属性（列），并自动去重 & $\pi_{\text{学号,姓名}}(\text{学生})$：提取学号和姓名列 \\
+        连接 & $\Join$ & 合并两个关系的元组，基于条件（如等值或不等值） & $\text{学生} \Join \text{选课}$（学号相等）合并学生和选课表 \\
+        除法 & $\div$ & 查询满足“对于$S$的所有元组，$R$中存在匹配”的元组 & $R \div S$：如查询选修了所有课程的学生 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsubsection{常见考点解析}
+\begin{itemize}
+    \item \textbf{运算符号与作用}：
+    \begin{itemize}
+        \item 选择（$\sigma$）：行级过滤（\texttt{WHERE}子句的数学基础）
+        \item 投影（$\pi$）：列级筛选（类似SQL的\texttt{SELECT}列）
+        \item 连接（$\Join$）：表合并操作（对应SQL的\texttt{JOIN}）
+        \item 除法（$\div$）：复杂查询（如“所有X都满足Y”）
+    \end{itemize}
+
+    \item \textbf{运算特点}：
+    \begin{itemize}
+        \item 投影自动去重：关系模型要求元组唯一
+        \item 自然连接：自动去除重复列（如两个表的公共属性只保留一列）
+        \item 除法条件：$R \div S$的结果是$R$中在$S$的属性集上的投影
+    \end{itemize}
+
+    \item \textbf{典型反例}：
+    \begin{itemize}
+        \item 除法应用示例：
+        \begin{itemize}
+            \item $R$（学号，课程）和$S$（课程）
+            \item $R \div S$的结果是“选修了$S$中所有课程的学生学号”
+            \item 若$S=\{\text{C1},\text{C2}\}$，则结果需同时包含C1和C2的学号
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+\section{简答题 30points}
+\subsection{数据挖掘步骤}
+数据挖掘的典型步骤包括：
+
+业务理解（明确目标）；
+
+数据理解（探索数据）；
+
+数据准备（清洗、转换数据）；
+
+建立模型（选择算法建模）；
+
+模型评估（验证性能）；
+
+部署应用（实际落地）。
+\subsection{文件系统阶段的缺陷}
+文件系统阶段的主要缺陷包括：
+
+数据冗余与不一致性（更新困难）；
+
+数据共享性差（文件格式不统一）；
+
+数据独立性低（程序与数据强耦合）；
+
+安全性不足（权限控制粗放）；
+
+缺乏完整性控制；
+
+并发控制问题；
+
+查询效率低下；
+
+缺乏统一管理。
+\subsection{视图与基本表的联系与区别}
+\begin{enumerate}
+    \item \textbf{联系}：
+    \begin{enumerate}
+        \item 视图基于基本表定义，依赖其数据；
+        \item 修改基本表会影响视图结果，视图更新（若允许）会反向修改基本表。
+    \end{enumerate}
+    
+    \item \textbf{区别}：
+    \begin{enumerate}
+        \item 存储方式：
+            \begin{itemize}
+                \item 基本表：存储真实数据；
+                \item 视图：仅存储查询定义。
+            \end{itemize}
+        \item 修改权限：
+            \begin{itemize}
+                \item 基本表：支持直接增删改查；
+                \item 视图：默认仅允许查询，更新受限制。
+            \end{itemize}
+        \item 安全控制：
+            \begin{itemize}
+                \item 视图可隐藏敏感字段，实现数据访问权限控制。
+            \end{itemize}
+        \item 独立性：
+            \begin{itemize}
+                \item 视图隔离底层表结构变化，提升应用逻辑独立性。
+            \end{itemize}
+    \end{enumerate}
+\end{enumerate}
+\subsection{系统故障的恢复策略}
+系统故障的恢复策略包括：
+
+日志记录：记录事务操作，支持回滚和重做；
+
+检查点机制：定期将内存数据写入磁盘，减少恢复范围；
+
+UNDO（回滚） ：撤销未提交事务的修改；
+
+REDO（重做） ：重做已提交但未持久化的事务；
+
+预写日志（WAL） ：确保数据与日志的顺序一致性。
+\subsection{调度封锁}
+\subsection{数据库管理系统存取数据的流程}
+数据库管理系统存取数据的流程包括：
+
+\begin{enumerate}
+    \item 用户请求与解析（语法、语义检查）；
+    \item 查询优化（选择访问路径）；
+    \item 执行引擎（执行计划）；
+    \item 事务管理（并发控制、日志记录）；
+    \item 存储引擎（访问物理数据）；
+    \item 缓冲区与持久化（脏页刷新、检查点）；
+    \item 结果返回。
+\end{enumerate}
+\subsection{事务隔离级别的区别}
+\subsubsection{核心区别总结}
+
+\begin{table}[h!]
+    \centering
+    \caption{隔离级别之间的核心区别}
+    \begin{tabular}{@{}>{\centering\arraybackslash}m{4cm}%
+                        >{\centering\arraybackslash}m{1.5cm}%
+                        >{\centering\arraybackslash}m{2.5cm}%
+                        >{\centering\arraybackslash}m{2cm}%
+                        >{\centering\arraybackslash}m{2.5cm}%
+                        >{\centering\arraybackslash}m{3.5cm}@{}}
+        \toprule
+        \textbf{隔离级别} & \textbf{脏读} & \textbf{不可重复读} & \textbf{幻读} & \textbf{并发性能} & \textbf{典型实现} \\
+        \midrule
+        读未提交           & \checkmark   & \checkmark        & \checkmark   & 高              & 无锁机制              \\
+        读已提交           & $\times$        & \checkmark        & \checkmark   & 较高            & 锁或MVCC（部分场景）  \\
+        可重复读           & $\times$        & $\times$            & \checkmark   & 中等            & MVCC（如MySQL）      \\
+        串行化             & $\times$        & $\times$            & $\times$        & 低              & 排他锁              \\
+        \bottomrule
+    \end{tabular}
+    
+\end{table}
+
+\section*{关键问题的定义}
+
+\begin{enumerate}
+    \item \textbf{脏读（Dirty Read）}：读取到其他事务未提交的数据，若该事务回滚，则数据无效。
+    \item \textbf{不可重复读（Non-Repeatable Read）}：同一事务内多次读取同一数据，结果不同（因其他事务已提交更新）。
+    \item \textbf{幻读（Phantom Read）}：同一事务内多次查询同一条件的数据，结果集行数或内容变化（因其他事务插入了符合条件的新数据）。
+\end{enumerate}
+\subsection{事务的AICD}
+\subsubsection{ACID特性总结}
+
+\begin{table}[h!]
+    \centering
+    \caption{ACID特性总结}
+    \begin{tabular}{@{}>{\centering\arraybackslash}m{3cm}%
+                        >{\arraybackslash}m{6cm}%
+                        >{\arraybackslash}m{6cm}@{}}
+        \toprule
+        \textbf{特性}   & \textbf{核心作用}         & \textbf{典型场景}                \\
+        \midrule
+        \textbf{原子性} & 避免“半完成”操作         & 银行转账、订单创建               \\
+        \textbf{一致性} & 保证数据合法性和业务规则 & 数据库约束（如主键、外键）       \\
+        \textbf{隔离性} & 避免并发问题（如脏读、幻读） & 多用户同时操作同一数据           \\
+        \textbf{持久性} & 数据提交后永不丢失       & 系统崩溃后恢复数据               \\
+        \bottomrule
+    \end{tabular}
+    
+\end{table}
+
+\subsubsection{关键问题}
+
+\begin{enumerate}
+    \item \textbf{为什么需要ACID？}
+    \begin{itemize}
+        \item 保证事务的可靠性，确保数据在并发、故障等复杂环境下仍能正确处理。
+    \end{itemize}
+    \item \textbf{ACID如何实现？}
+    \begin{itemize}
+        \item 通过日志（保证原子性和持久性）、锁/MVCC（保证隔离性）、约束（保证一致性）等机制。
+    \end{itemize}
+    \item \textbf{ACID与BASE（NoSQL的软状态模型）的区别？}
+    \begin{itemize}
+        \item ACID强调强一致性，BASE强调最终一致性（如高并发场景下牺牲强一致性换取可用性）。
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{备考建议}
+\begin{itemize}
+    \item \textbf{记忆技巧}：用“\textbf{原子、一致、隔离、持久}”四字口诀记忆ACID。
+    \item \textbf{结合实例}：用银行转账、订单系统等经典案例理解每个特性的作用。
+    \item \textbf{关联隔离级别}：隔离性（Isolation）与事务的四个隔离级别（如Read Committed）直接相关，需结合理解。
+\end{itemize}
+\subsection{完整性约束}
+\subsubsection{约束类型与其核心作用}
+
+\begin{table}[h!]
+    \centering
+    \caption{数据库约束类型总结}
+    \begin{tabular}{@{}>{\centering\arraybackslash}m{4cm}%
+                        >{\arraybackslash}m{5cm}%
+                        >{\arraybackslash}m{6cm}@{}}
+        \toprule
+        \textbf{约束类型}     & \textbf{核心作用}         & \textbf{典型场景}                \\
+        \midrule
+        \textbf{实体完整性}   & 确保主键唯一且非空       & 学生表的学号、订单表的订单号     \\
+        \textbf{域完整性}     & 限制字段的取值范围和类型 & 年龄限制、成绩范围               \\
+        \textbf{参照完整性}   & 保证外键引用有效         & 订单与客户表关联、部门与员工关联 \\
+        \textbf{用户定义完整性} & 实现业务规则（如折扣率限制） & 价格区间、性别选项               \\
+        \textbf{唯一性约束}   & 确保字段值唯一（允许空值） & 邮箱、身份证号                   \\
+        \textbf{默认值约束}   & 自动填充字段的默认值     & 创建时间、状态标志               \\
+        \bottomrule
+    \end{tabular}
+    
+\end{table}
+
+\subsubsection{备考建议}
+
+\begin{enumerate}
+    \item \textbf{记忆关键点}：用“\textbf{实体、域、参照、用户定义}”四类约束框架记忆。
+    \item \textbf{结合SQL语法}：掌握 \texttt{PRIMARY KEY}、\texttt{FOREIGN KEY}、\texttt{CHECK}、\texttt{UNIQUE} 等约束的SQL实现。
+    \item \textbf{案例分析}：通过实际表设计（如学生选课系统）理解约束的应用场景。
+    \item \textbf{常见考点}：
+    \begin{itemize}
+        \item 不同约束的区别（如主键与唯一性约束）。
+        \item 违反约束的后果及处理方式。
+        \item 约束对数据一致性的保障作用。
+    \end{itemize}
+\end{enumerate}
+\subsection{数据库的优化}
+\subsubsection{优化原则}
+
+\begin{table}[h!]
+    \centering
+    \caption{数据库优化原则}
+    \begin{tabular}{@{}>{\centering\arraybackslash}m{7cm}%
+                        >{\arraybackslash}m{8cm}@{}}
+        \toprule
+        \textbf{优化原则} & \textbf{具体说明} \\
+        \midrule
+        \textbf{先分析后优化} & 
+        通过慢查询日志、性能监控工具（如`SHOW PROCESSLIST`、`pt-query-digest`）定位瓶颈。\\
+        \textbf{避免过度优化} &
+        优先解决核心问题，避免为小问题引入复杂方案。\\
+        \textbf{平衡读写} &
+        根据业务场景权衡一致性与性能（如OLTP vs OLAP）。\\
+        \bottomrule
+    \end{tabular}
+    
+\end{table}
+
+\subsubsection{简答题答题要点}
+
+\begin{enumerate}
+    \item \textbf{核心方法}：
+    \begin{itemize}
+        \item 索引优化
+        \item 查询优化
+        \item 存储优化
+        \item 并发控制
+    \end{itemize}
+    \item \textbf{关键工具}：
+    \begin{itemize}
+        \item `EXPLAIN`
+        \item 慢查询日志
+        \item 执行计划分析
+    \end{itemize}
+    \item \textbf{典型场景}：
+    \begin{itemize}
+        \item 分页优化
+        \item 减少全表扫描
+        \item 合理分区
+        \item 避免死锁
+    \end{itemize}
+\end{enumerate}
+\subsection{关系模型和网状模型的数据结构}
+
+\subsubsection{核心区别对比}
+
+\begin{table}[h!]
+    \centering
+    \caption{关系模型与网状模型的核心区别}
+    \begin{tabular}{@{}>{\centering\arraybackslash}m{4cm}%
+                        >{\arraybackslash}m{6cm}%
+                        >{\arraybackslash}m{6cm}@{}}
+        \toprule
+        \textbf{特征}            & \textbf{关系模型}                          & \textbf{网状模型}                          \\
+        \midrule
+        \textbf{数据结构}        & 二维表格（关系）                            & 有向图（记录+指针）                        \\
+        \textbf{关联方式}        & 主键/外键（显式声明）                       & 指针（隐式地址引用）                       \\
+        \textbf{查询语言}        & SQL（声明式）                               & 网状语言（过程式）                         \\
+        \textbf{标准化}          & 高（支持范式）                              & 低（依赖指针，冗余可能高）                 \\
+        \textbf{灵活性}          & 查询灵活（通过SQL）                         & 查询复杂（需指针导航）                     \\
+        \textbf{维护成本}        & 低（结构化约束）                            & 高（依赖指针路径）                         \\
+        \textbf{适用场景}        & 结构化、事务性数据                          & 复杂多对多关系、资源受限环境              \\
+        \bottomrule
+    \end{tabular}
+    
+\end{table}
+
+\subsubsection{关键问题总结}
+
+\begin{enumerate}
+    \item \textbf{关系模型的优势}：
+    \begin{itemize}
+        \item 简单直观，支持标准SQL，易于维护。
+        \item 符合ACID，适合高并发事务场景。
+    \end{itemize}
+    \item \textbf{网状模型的局限性}：
+    \begin{itemize}
+        \item 结构复杂，查询需依赖指针路径。
+        \item 扩展性差，修改结构需调整大量指针。
+    \end{itemize}
+    \item \textbf{历史地位}：
+    \begin{itemize}
+        \item 网状模型是关系模型的前身，已被关系模型取代（如IBM的IMS系统逐渐过渡到DB2）。
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{考研备考建议}
+
+\begin{enumerate}
+    \item \textbf{重点记忆}：
+    \begin{itemize}
+        \item 二维表 vs 网状图
+        \item 主键/外键 vs 指针
+        \item SQL vs 过程式查询
+    \end{itemize}
+    \item \textbf{对比分析}：
+    \begin{itemize}
+        \item 通过表格对比结构、关联方式、查询语言、适用场景等。
+    \end{itemize}
+    \item \textbf{案例理解}：
+    \begin{itemize}
+        \item 关系模型：学生-课程表通过学号关联。
+        \item 网状模型：部门记录通过指针直接指向多个员工记录。
+    \end{itemize}
+\end{enumerate}
+\section{大题 50points}
+\subsection{SQL语句 30 points/8}
+考点包括：创建视图、修改表结构、插入数据、删除数据、group by语句
+\subsection{E-R图设计 12 points}
+\subsection{函数依赖-范式 8 points}
+\end{document}
