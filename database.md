@@ -3,7 +3,7 @@
 烂石\
 
 ::: flushleft
-![images](images/logo.jpg){width="50%"}
+![static/images](static/images/logo.jpg){width="50%"}
 :::
 
 2025-03-04
@@ -1071,8 +1071,8 @@ Q2:加入适当的Xlock()和Unlock()操作,要求执行两段锁协议,且每个
 
 实体为矩形，属性为椭圆，关系为菱形。联系用线连接实体和关系，表示实体间的联系。关系有一对一、一对多、多对多三种情况。
 
-![ER图](images/ER图.jpg){width="80%"}
+![ER图](static/images/ER图.jpg){width="80%"}
 
 ### 例题
 
-![ER图例题](images/ER图例题.png){width="80%"}
+![ER图例题](static/images/ER图例题.png){width="80%"}

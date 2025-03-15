@@ -69,7 +69,7 @@ Temporary Items
 *.dvi
 *.xdv
 *-converted-to.*
-# these rules might exclude images files for figures etc.
+# these rules might exclude static/images files for figures etc.
 # *.ps
 # *.eps
 # *.pdf

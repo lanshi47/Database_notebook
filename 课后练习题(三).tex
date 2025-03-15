@@ -4,6 +4,7 @@
 \usepackage{enumitem}
 \usepackage{xcolor} % Color support for listings
 \usepackage{graphicx}
+\usepackage{pdfpages}
 \usepackage{amssymb} % For join symbol
 \usepackage{amsmath}
 \usepackage{listings}
@@ -78,11 +79,18 @@
     \vspace{1cm}
     {\large \today \par}
     \vspace{4cm}
-    \includegraphics[width=0.5\textwidth]{images/logo.jpg}
+    \includegraphics[width=0.5\textwidth]{static/images/logo.jpg}
     \vspace*{\fill}
     \thispagestyle{empty} % 封面不显示页码
     \newpage
 \end{titlepage}
+\section{数据库概念}
+\subsection{模型概念体系}
 
-
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{static/images/数据库模型概念体系.jpg} % 调整宽度和路径
+    \caption{数据库模型概念体系图} % 添加标题
+    \label{fig:database-model-system} % 可选：添加标签以便引用
+\end{figure}
 \end{document}
