@@ -4,6 +4,7 @@
 \usepackage{enumitem}
 \usepackage{xcolor} % Color support for listings
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{pdfpages}
 \usepackage{amssymb} % For join symbol
 \usepackage{amsmath}
@@ -71,9 +72,11 @@
 \begin{titlepage}
     \centering
     \vspace*{\fill}
-    {\LARGE\bfseries 数据库系统原理课程\par}
+    {\Large\bfseries 数据库系统原理课程\par}
     \vspace{2cm}
-    {\Huge\bfseries 查漏补缺\par}
+    {\LARGE\bfseries 数据库系统考试\par}
+    \vspace{2cm}
+    {\Large\bfseries 查漏补缺-选填\par}
     \vspace{2cm}
     {\Large 烂石\par}
     \vspace{1cm}
@@ -86,11 +89,43 @@
 \end{titlepage}
 \section{数据库概念}
 \subsection{模型概念体系}
-
-\begin{figure}[htbp]
+概念题选择题出的多,如图\ref{fig:database-model-system}所示
+\FloatBarrier
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{static/images/数据库模型概念体系.jpg} % 调整宽度和路径
     \caption{数据库模型概念体系图} % 添加标题
     \label{fig:database-model-system} % 可选：添加标签以便引用
 \end{figure}
+\subsection{数据库设计阶段体系}
+了解框架,如图\ref{fig:database-design}所示
+可以看到,需求分析阶段和DFD挂钩,概念设计阶段和概念模型E-R图相关,逻辑设计和逻辑模型相关规范化,物理设计阶段和物理模型相关.
+\FloatBarrier
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{static/images/数据库设计阶段图.png}
+  \caption{数据库设计阶段图}
+  \label{fig:database-design}
+\end{figure}
+
+\subsection{数据库三级模式}
+主要注意哪些独立性和哪些模式相关,把握好对应关系,如图\ref{fig:database-three-level-mode}所示.
+\FloatBarrier
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{static/images/数据库三级模式.png}
+  \caption{数据库三级模式}
+  \label{fig:database-three-level-mode}
+\end{figure}
+\subsection{小结}
+选择填空常考的基础知识点,如图\ref{fig:database-base-knowledge}所示.
+\FloatBarrier
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{static/images/数据库基本知识.png}
+  \caption{数据库基本知识}
+  \label{fig:database-base-knowledge}
+\end{figure}
+\section{关系数据库}
+
 \end{document}
