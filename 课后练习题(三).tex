@@ -32,7 +32,6 @@
 \setCJKfamilyfont{zhhei}{SimHei}[Path=D:/Program Files/MiKTeX/fonts/custom/, Extension=.ttf]
 \newcommand{\heiti}{\CJKfamily{zhhei}}
 
-
 % 自定义编号格式
 \renewcommand{\thesection}{\arabic{section}}
 \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
@@ -46,6 +45,14 @@
   {\heiti\zihao{-4}\enboldfont}{\thesubsubsection}{1em}{}
 
 
+% 定义计数器
+\newcounter{mycounter}
+
+% 定义命令用于显示编号
+\newcommand{\myitem}{%
+  \par \stepcounter{mycounter}%
+  \textbf{\themycounter.}~%
+}
 
 % 设置代码块样式
 \lstset{
@@ -126,6 +133,146 @@
   \caption{数据库基本知识}
   \label{fig:database-base-knowledge}
 \end{figure}
+\newpage
 \section{关系数据库}
+\subsection{易混淆的概念}
+\begin{enumerate}
+  \item 关系代数是以\underline{集合运算}为基础的运算.
+  \item 字段是列信息,记录是行信息,选择操作是对\textbf{\heiti 行/记录}操作,
+  投影操作是对\textbf{\heiti 列/字段}操作.
+  \item $R-S$表示在R但不在S的集合
+\end{enumerate}
+\subsection{常考填空}
+如图\ref{fig:Relational-Database-Mind-Map} 所示,常见的分类和概念.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{static/images/关系数据库.png}
+  \caption{关系数据库思维导图}
+  \label{fig:Relational-Database-Mind-Map}
+\end{figure}
+\subsection{关系代数表达式例题}
+\subsubsection*{eg. 在“学生一选课一课程”数据库中的3个关系如下:}
+
+\begin{table}[H]
+\centering
+\caption{数据库中的3个关系}
+\begin{tabular}{c c c c}
+\toprule
+S (S\#, SNAME, SEX, AGE) & SC (S\#, C\#, GRADE) & C (C\#, CNAME, TEACHER) \\
+\midrule
+\end{tabular}
+
+\end{table}
+
+查找选修“数据库技术”这门课程的学生的学生姓名和成绩，若用关系代数表达式来表示为:
+
+\begin{equation*}%%\bowtie
+\pi_{SNAME,GRADE} \big((S \bowtie SC )\bowtie (\sigma_{CNAME='\text{数据库技术}'} (C))\big) 
+\end{equation*}
+\newpage
+\section{关系数据库标准语言SQL}
+\subsection{错题知识点}
+\begin{enumerate}
+  \item 过程化
+  注重流程,如何做
+  \item 非过程化
+  注重结果,做出什么
+\end{enumerate}
+删除行/记录是用:
+\begin{lstlisting}
+  DELETE row FROM TABLES
+\end{lstlisting}
+删除列/字段用:
+\begin{lstlisting}
+  ALTER TABLES DROP colomn
+\end{lstlisting}
+\subsection{常考填空}
+\myitem SQL(Structured Query Language)的中文全称是\underline{结构化查询语言}
+\myitem SQL功能:
+\begin{itemize}
+  \item 数据查询
+  \item 数据定义
+  \item 数据操纵
+  \item 数据控制
+\end{itemize}
+\myitem \text{\heiti 基本表}有对应的物理存储,\text{\heiti 视图}没有对应的物理存储.
+\par 视图是从\underline{基本表或视图}中导出的表,数据库中实际存放的是视图的\underbar{定义}.
+\myitem DML(Data Manipulation Language)特点:
+\begin{itemize}
+  \item 操作对象与结果均为关系
+  \item 操作的非过程性强
+  \item 语言一体化
+  \item 以数学理论为基础
+\end{itemize}
+\myitem 插入语句
+\begin{lstlisting}
+  INSERT INTO TABLES(field1,field2,field3,,,) VALUES(x,y,z,,,)
+\end{lstlisting}
+\myitem 修改语句
+\begin{lstlisting}
+  UPDATE TABLES SET field=vlaue 
+  WHERE conditions
+\end{lstlisting}
+\myitem 删除语句
+\begin{lstlisting}
+  DELETE FROM TABLES 
+  WHERE conditions
+\end{lstlisting}
+\myitem 例题
+\subsubsection*{1. 设关系 R (A, B, C) 和 S (A, D, E, F)，有 R.A=S.A。若将关系代数表达式：\(\pi_{R.A, R.B, S.D, S.F} (R \bowtie S)\) 用 SQL 语言的查询语句表示，则为：}
+\par \begin{lstlisting}
+SELECT R.A,R.B,S.D,S.F
+FROM R,S
+WHERE R.A=S.A
+\end{lstlisting}
+\subsubsection*{2. 在“学生一选课一课程”数据库中的3个关系如下：}
+
+\begin{table}[h]
+\centering
+\caption{数据库中的3个关系}
+\begin{tabular}{c c c c}
+\toprule
+S (S\#, SNAME, SEX, AGE) & SC (S\#, C\#, GRADE) & C (C\#, CNAME, TEACHER) \\
+\midrule
+\end{tabular}
+\end{table}
+
+查找选修“数据库技术”这门课程的学生的学生名和成绩。若使用连接查询的SQL语句是：
+\par \begin{lstlisting}
+  SELECT SNAME,GRADE
+  FROM S
+  JOIN SC ON S.S\#=SC.S\#
+  JOIN C ON SC.C\#=C.C\#
+  WHERE CNAME='数据库技术'
+\end{lstlisting}
+
+\subsubsection*{3.设有两个关系 R (A, B, C) 和 S (C, D, E)，用 SQL 查询语句表达下列关系代数表达式 \(\pi_{A, E} (\sigma_{B=D} (R \bowtie S))\) 的语句是}
+\par 答案:\begin{lstlisting}
+  SELECT R.A,S.E FROM R
+  JOIN S ON R.C=S.C
+  WHERE R.B=S.D
+\end{lstlisting}
+\myitem 游标（Cursor）是数据库系统中用于逐行处理查询结果集的一种机制。
+它允许应用程序对结果集中的数据执行精细控制，支持遍历、读取、更新或删除特定行，适用于需要逐行操作的场景。(类似于指针)
+\begin{table}[H]
+  \centering
+  \caption{对比：游标 vs. 集合操作}
+  \begin{tabular}{c c c}
+  \toprule
+  \textbf{特性} & \textbf{游标} & \textbf{集合操作} \\
+  \midrule
+  处理方式 & 逐行 & 批量 \\
+  性能 & 低效 & 高效 \\
+  适用场景 & 复杂逐行逻辑 & 简单查询、聚合、连接 \\
+  资源占用 & 高 & 低 \\
+  \bottomrule
+  \end{tabular}
+  \end{table}
+  一个SQL语句原则上可产生或处理一组记录，而主语句一次只能处理一个记录，
+  为此必须协调两种处理方式，这是通过使用\underline{游标或Cursor机制}来解决的。
+\myitem DBMS中的语言系统分为\underline{主语言}和\underline{SQL语言}
+\myitem \underline{删除/修改/插入操作}可以引发触发器.
+\newpage
+\section{数据库安全性}
 
 \end{document}
