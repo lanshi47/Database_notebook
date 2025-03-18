@@ -11,6 +11,7 @@
 \usepackage{listings}
 \usepackage{longtable}
 \usepackage{booktabs} % 添加booktabs宏包以支持三线表
+\usepackage{tabularx} % 新增tabularx宏包用于自动调整列宽
 \usepackage{array}      % 列格式控制
 \usepackage{caption}    % 表格标题格式
 \usepackage{placeins} 
@@ -53,7 +54,12 @@
   \par \stepcounter{mycounter}%
   \textbf{\themycounter.}~%
 }
-
+% 在每个 section 开始时重置计数器
+\let\oldsection\section
+\renewcommand{\section}{%
+  \setcounter{mycounter}{0}%
+  \oldsection%
+}
 % 设置代码块样式
 \lstset{
     basicstyle=\ttfamily,
@@ -274,5 +280,79 @@ S (S\#, SNAME, SEX, AGE) & SC (S\#, C\#, GRADE) & C (C\#, CNAME, TEACHER) \\
 \myitem \underline{删除/修改/插入操作}可以引发触发器.
 \newpage
 \section{数据库安全性}
+\subsection{选择}
+\subsubsection{安全性控制}
+授权的数据对象的范围越小,授权子系统就越灵活;
+
+授权的数据对象的约束越细致,授权子系统就越安全,但灵活性降低;
+\subsection{填空}
+\myitem 安全性问题包含\underline{技术安全类,管理安全类和政策法律类}
+\myitem 鉴别用户的常用方法:\underline{用户名和口令}
+\myitem 安全子系统由\underline{用户权限定义}和\underline{合法权检查机制}组成.
+\myitem DBMS支持DAC(自主存取控制),有些还支持MAC(强制存取控制)
+\begin{table}[htbp]
+  \centering
+  \caption{DAC和MAC对比总结}
+  \begin{tabular}{p{3.5cm} >{\centering\arraybackslash}p{5cm} >{\centering\arraybackslash}p{5cm}}
+  \toprule
+  \textbf{对比项} & \textbf{DAC（自主访问控制）} & \textbf{MAC（强制访问控制）} \\
+  \midrule
+  主体与客体权限 & 用户自主决定 & 系统根据策略自动执行 \\
+  灵活性 & 高（用户自主管理） & 低（系统策略决定） \\
+  安全性 & 较低（可能出现权限传播问题） & 较高（严格控制权限） \\
+  权限分配者 & 资源所有者 & 系统或管理员 \\
+  常见应用场景 & 日常软件与常规数据库系统 & 军事、政府、机密系统 \\
+  \bottomrule
+  \end{tabular}
+  \end{table}
+\myitem 用户权限由\underbar{数据对象}和\underbar{操作类型}组成
+\myitem 授权--GRANT;收回--REVOKE
+\myitem 用户查看保护--视图机制
+\myitem 审计分为\underbar{用户级}和\underbar{系统级}
+\newpage
+\section{数据库完整性}
+\subsection{选择}
+出现和\text{\heiti 主键}有关的完整性考点就选\textbf{\heiti 实体完整性}
+
+出现和\text{\heiti 外键}有关的完整性考点就选\textbf{\heiti 参照完整性}
+
+出现和\text{\heiti 自定义规则}有关的完整性考点就选\textbf{\heiti 用户定义的完整性}
+
+\subsection{填空}
+\myitem 数据库的完整性指的是数据的\underbar{正确性}和\underbar{相容性.}
+\myitem 关系模型的完整性包括\underbar{实体完整性,参照完整性和用户定义完整性}.
+\myitem 数据库完整性的定义一般由SQL的\underbar{DDL(Data Definition Language)}语句来实现,它们作为数据库模式的一部分存入\underbar{数据字典}中.
+\myitem 实体完整性在\underbar{CREATE TABLE}中用\underbar{PRIMARY KEY}定义.
+\myitem 参照完整性在\underbar{CREATE TABLE}中用\underbar{FOREIGN KEY}定义外码,用\underbar{REFERENCE}指明这些外码参照哪些表的主码.
+\par 延伸扩展,如图\ref{fig:SQL-Language-Classification}所示,SQL语言分类
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{static/images/SQL语言分类.png}
+  \caption{SQL语言分类图}
+  \label{fig:SQL-Language-Classification}
+\end{figure}
+\newpage
+\section{关系数据理论}
+\subsection{选择}
+规范化,如表\ref{tab:normal-forms}所示
+\begin{table}[H]
+  \centering
+  \caption{数据库范式核心条件}
+  \label{tab:normal-forms}
+  \begin{tabularx}{\textwidth}{@{}lX@{}} % 使用tabularx环境，自动填满文本宽度
+  \toprule
+  \textbf{范式} & \textbf{定义与核心条件} \\
+  \midrule
+  1NF (原子范式) & 所有属性值为不可再分的原子值，但存在非主属性对候选键的\textbf{部分函数依赖}。 \\
+  2NF (候选键范式) & 满足1NF，且非主属性完全函数依赖于候选键，但存在非主属性对候选键的\textbf{传递函数依赖}。 \\
+  3NF (第三范式) & 满足2NF，且不存在传递函数依赖，但允许非主属性之间存在依赖关系。 \\
+  BCNF (巴斯-科德范式) & 满足3NF，且所有函数依赖的决定因素均为\textbf{超键}（候选键或主键）。 \\
+  4NF (第四范式) & 满足BCNF，且不存在非平凡的\textbf{多值依赖}（即属性间无非平凡的多值关联）。 \\
+  5NF (第五范式/投影-连接范式) & 满足4NF，且不存在非平凡的\textbf{连接依赖}，确保关系无法通过投影-连接分解为更小的关系集合。 \\
+  \bottomrule
+  \end{tabularx}
+\end{table}
+\subsection{填空}
+根据数据库系统中的函数依赖推理规则，$X\rightarrow Y$ 和 $Y\rightarrow Z$ 时，可以推导出 $X \rightarrow YZ$.
 
 \end{document}
