@@ -353,6 +353,20 @@ S (S\#, SNAME, SEX, AGE) & SC (S\#, C\#, GRADE) & C (C\#, CNAME, TEACHER) \\
   \end{tabularx}
 \end{table}
 \subsection{填空}
-根据数据库系统中的函数依赖推理规则，$X\rightarrow Y$ 和 $Y\rightarrow Z$ 时，可以推导出 $X \rightarrow YZ$.
+\myitem 合并规则:$X\rightarrow Y$ 和 $Y\rightarrow Z$ 时，可以推导出 $X \rightarrow YZ$.
+\myitem 平凡函数依赖可以通过自反律推出
+\begin{itemize}
+  \item 平凡函数依赖：$Y \subseteq X \Rightarrow X \rightarrow Y$ 总成立，信息量小。
+  \item 自反律：$X \rightarrow X$ 总成立，是平凡依赖的特例（当 $Y = X$ 时）。
+\end{itemize}
+\myitem 规范化设计中,对模式等价分解时,要具有\underline{无损连接性}和\underline{保持函数依赖}.
+\myitem 多种数据依赖,其中最重要的是\underbar{函数依赖}和\underbar{多值依赖}.
+\myitem 设关系模式 R （A，B，C），F 是 R 上成立的 FD 集，F = \{B→A，B→C\}，则分解 ρ  = \{AB，AC\}丢失的 FD 是 ?。
+\par 易知,候选键为B,其中B->A,B->C,但在AB中不包含C,AC中不包含B,即B->C不成立,所以丢失$B \rightarrow C$.
+\myitem 关系范式不属于2NF时,会产生\underline{插入异常,删除异常和修改复杂},只满足1NF的关系可能存在\text{\heiti 数据冗余大,修改异常,插入异常和删除异常}.
+\myitem 两个函数依赖集等价的充要条件为\underbar{F包含在G的超集,G包含在F的超集中}.
+\newpage
+\section{数据库设计}
+\myitem 数据库建设的基本规律:"三分技术,七分管理,十二分基础数据".
 
 \end{document}
