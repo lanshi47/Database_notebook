@@ -19,7 +19,13 @@
 \usepackage{fontspec}
 \usepackage{titlesec}
 \usepackage{cleveref}
-
+\usepackage{background} % 添加水印宏包
+\backgroundsetup{ % 水印参数设置
+    scale=3,          % 水印文字大小（可调）
+    angle=0,         % 水印旋转角度
+    opacity=0.25,     % 透明度（0-1）
+    contents={\includegraphics[width=0.5\textwidth]{static/pdfs/水印.pdf}} % 水印文件
+}
 % 设置英文主字体为 Times New Roman
 \setmainfont{Times New Roman}[Path=D:/Program Files/MiKTeX/fonts/custom/, Extension=.otf]
 
