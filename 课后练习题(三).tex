@@ -368,5 +368,42 @@ S (S\#, SNAME, SEX, AGE) & SC (S\#, C\#, GRADE) & C (C\#, CNAME, TEACHER) \\
 \newpage
 \section{数据库设计}
 \myitem 数据库建设的基本规律:"三分技术,七分管理,十二分基础数据".
+\myitem 规范设计法的基本思想是\underbar{过程迭代}和\underbar{逐步求精}.
+\myitem 数据库的生命周期可分为两个阶段,一是\underbar{数据库需求分析和设计阶段},二是\underbar{数据库实现和运行阶段}.
+\myitem 数据库设计阶段可分为:\underbar{需求分析,概念结构设计,逻辑结构设计,物理设计阶段,数据库实施阶段,数据库运行和维护阶段}.
+\myitem 数据库实施阶段包括\underbar{组织数据入库}和\underbar{应用程序的编码和测试}.
+\myitem 数据库的物理设计分为两步,一是确定数据库的\underbar{物理结构},二是对其评价,指标为\underline{空间}和\underline{时间效率}.
+\par 具体设计阶段如图\ref{fig:Database-design-phase}所示
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\linewidth, keepaspectratio]{static/images/数据库设计阶段图.png}
+  \caption{数据库设计阶段图}
+  \label{fig:Database-design-phase}
+\end{figure}
+\myitem 按应用目的分类,模型可分为\underbar{概念模型}和\underbar{数据模型}.
+\myitem 类的继承提高了软件的\underbar{可重用性/共享性},继承的模型称为\underline{子模型}.
+\myitem 概念结构是对现实世界中的一种抽象,抽象有\underline{分类,聚集,概括}.
+\myitem E-R图设计冲突主要来自\underline{属性,命名和结构}.
+\newpage
+\section{数据库恢复技术}
+\subsection{易错概念}
+\myitem 事务的持续性是永久的,一旦提交,对数据库的改变是永久的.
+\myitem 事务日志用于保存\underbar{关于"数据"和"更新数据"}相关的操作(必须是数据,且数据要发生改变).
+\subsection{填空}
+\myitem 数据库应用程序的基本逻辑单元是\underline{事务}.
+\myitem 事务处理技术主要包括\underline{数据库恢复技术}和\underbar{并发控制技术}.
+\myitem 事务的特性:\underline{原子性(Atomicity),一致性(Consistency),隔离性(Isolation),持续性(Durability)},也称为\textbf{ACID}
+\myitem 数据库系统故障分为:\underline{事务故障,系统故障,介质故障,计算机病毒}.
+\myitem 建立冗余数据最常用的技术是\underline{数据转储}和\underline{登录日志文件}
+\myitem 转储可分为\underline{静态转储}和\underline{动态转储},转储方式可分为\underline{海量转储}和\underline{增量转储}.
+\myitem \text{\heiti 日志文件}是用来记录事务对数据的更新操作的文件.\quad 主要分为两种格式:以\underline{记录}为单位和以\underline{数据块}为单位的日志文件.
+\newpage 
+\section{并发控制}
+\myitem 死锁是\text{\heiti 资源分配策略不当}导致的,两个或多个事务同时处于互相等待状态,称为死装.
+\myitem 并发操作带来的问题包括:\underline{读取"脏"数据,丢失修改,不可重复读}
+\myitem 多个事务的并发执行是正确的，当且仅当其结果与按某一次序串行地执行它们的结果相同，我们称这种调度策略为\underbar{可串行化}的调度。
+\myitem \text{\heiti 封锁对象的大小}被称为封锁的颗粒度.
+\myitem 封锁类型分为\underline{排他锁(Exclusive Locks)--X锁}和\underline{共享锁(Share Locks)--S锁}.(巧记:首字母大小,E不发音)
+
 
 \end{document}
