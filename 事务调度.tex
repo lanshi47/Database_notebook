@@ -65,14 +65,14 @@ Q2:加入适当的Xlock()和Unlock()操作,要求执行两段锁协议,且每个
         T1 & T2  \\
         \midrule % 中间横线
         Xlock(A) &  \\
-        X=R(A) &  \\
-        & Xlock(A) \\
+        X=R(A) &  \\ 
         Xlock(B) & \\
         Y=R(B) & \\
         X=X+Y & \\
         W(A,X) & \\
         Unlock(A) & \\
         Unlock(B) & \\
+        & Xlock(A) \\
         & X=X-10 \\
         & W(A,X) \\
         & Xlock(B) \\
