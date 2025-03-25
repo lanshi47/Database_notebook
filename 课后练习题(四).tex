@@ -106,7 +106,66 @@
     \thispagestyle{empty} % 封面不显示页码
     \newpage
 \end{titlepage}
+\section{绪论}
+\myitem 数据库的核心是\underbar{\color{red}DBMS}
+\myitem 数据库系统最大的特点是\underline{\color{red}数据的三级抽象和二级独立性}
+\myitem DBMS是位于\underline{\color{red}用户和操作系统}之间的一层管理软件
+\myitem 数据模型是由\underbar{\color{red}数据结构,数据操作和完整性约束}三部分组成的
+\myitem \underline{\color{red}数据结构}是对数据系统的静态特性描述,\underline{\color{red}数据操作}是动态特性描述
+\myitem 什么是数据库?
+\par 答：数据库是长期存储在计算机内、有组织的、可共享的数据集合。数据库是按某种数据模型进行组织的、存放在外存储器上，且可被多个用户同时使用。因此，数据库具有较小的冗余度，较高的数据独立性和易扩展性。
+\myitem 什么是数据库的数据独立性?
 
+    答：数据独立性表示应用程序与数据库中存储的数据不存在依赖关系，包括逻辑数据独立性和物理数据独立.
+    逻辑数据独立性是指局部逻辑数据结构(外视图即用户的逻辑文件)与全局逻辑数据结构(概念视图)之间的独立性。当数据库的全局逻辑数据结构(概念视图)发生变化(数据定义的修改、数据之间联系的变更或增加新的数据类型等)时，它不影响某些局部的逻辑结构的性质，应用程序不必修改。
+    物理数据独立性是指数据的存储结构与存取方法(内视图)改变时，对数据库的全局逻辑结构(概念视图)和应用程序不必作修改的一种特性，也就是说，数据库数据的存储结构与存取方法独立。
+\myitem 什么是数据库管理系统?
 
+    答：数据库管理系统(DBMS)是操纵和管理数据库的一组软件，它是数据库系统(DBS)的重要组成部分。不同的数据库系统都配有各自的DBMS，而不同的DBMS各支持一种数据库模型，虽然它们的功能强弱不同，但大多数DBMS的构成相同，功能相似。一般说来，DBMS具有定义、建立、维护和使用数据库的功能，它通常由三部分构成：数据描述语言及其翻译程序、数据操纵语言及其处理程序和数据库管理的例行程序。
+\myitem 数据库设计一般分为哪几个阶段，简述每个阶段的主要任务是什么？
+    
+解：（1）数据库设计分为6个阶段：需求分析、概念结构设计、逻辑结构设计、物理结构设计、数据库实施、数据库运行和维护。
+（2）各阶段任务如下：
+①需求分析：准确了解与分析用户需求（包括数据与处理）。
+②概念结构设计：通过对用户需求进行综合、归纳与抽象，形成一个独立于具体 DBMS 的概念模型。
+③逻辑结构设计：将概念结构转换为某个 DBMS 所支持的数据模型，并对其进行优化。
+④数据库物理设计：为逻辑数据模型选取一个最适合应用环境的物理结构（包括存储结构和存取方法）。
+⑤数据库实施：设计人员运用 DBMS 提供的数据语言、工具及宿主语言，根据逻辑设计和物理设计的结果建立数据库，编制与调试应用程序，组织数据入库，并进行试运行。 
+⑥数据库运行和维护：在数据库系统运行过程中对其进行评价、调整与修改。
+\section{关系数据库理论}
+\myitem 关系模式定义格式为\underline{关系名(属性名1,,,,属性名n)}
+\myitem 关系模式的定义包括\underline{关系名,属性名,属性类型,属性长度,关键字}
+\myitem 关系数据库中的基于数学上两类运算是\underline{关系代数}和\underline{关系演算}
+\myitem 传统集合运算有\underline{差,交,并,笛卡尔积}
+\myitem 专门的关系运算有\underline{连接,投影,选择}
+\section{其他}
+\myitem SQL变量声明与赋值的语法
 
+变量声明：在SQL Server中，变量必须以 @ 开头，使用 DECLARE 关键字声明，并必须指定数据类型。
+语法：
+\begin{lstlisting}
+  DECLARE @变量名 数据类型;
+\end{lstlisting}
+变量赋值：可以通过 SELECT 或 SET 语句赋值。
+\begin{lstlisting}
+  DECLARE @count INT;
+SELECT @count = 1;  -- 或使用 SET @count = 1;
+\end{lstlisting}
+\begin{itemize}
+  \item 临时存储中间结果，减少重复查询。
+  \item 控制流程逻辑（如循环、条件判断）。
+  \item  动态构建SQL语句，增强灵活性。
+  \item  存储过程参数化，提升代码复用性。
+\end{itemize}
+\myitem 删除存储过程用\underbar{drop proc}
+\myitem 多个语句捆绑用\underline{BEGIN-END}
+\myitem REVOKE语法--列级权限收回
+\begin{lstlisting}
+  REVOKE UPDATE (列名) ON 表名 FROM 用户名;
+\end{lstlisting}
+\par  收回权限--特定列的修改权
+\begin{lstlisting}
+  GRANT UPDATE (列名) ON 表名 TO 用户名;
+\end{lstlisting}
+\myitem  释放游标资源用\underbar{DELALLOCATE}
 \end{document}
